@@ -1,66 +1,58 @@
 ================================ ==> SORT <== ==================================
 sort is a command it sorts the require fields from the file.
 
------------------------------------------------------
-[1] The last step
+
+---------------individual tasks----------
+
+  [0.1] The last step
 output => text: LinesToDisplay
-    1
-    2
-    3
+    abc
+    bcd
+    cde
 input => array: sortedLines
-    [1,2,3]
-name => arrangeLines
+    [abc,bcd,cde]
+name => displayArrangedLines
 
 -----------------------------------------------------
 
-[2b] The previous step
+[0.2] The previous step
 output => array : sortedLines
-    [1,2,3]
+    [abc,bcd,cde]
 input => array : totalLines
-    [2,1,3]
-name => sortLinesInNumericOrder
-
------------------------------------------------------
-[2a] The previous step
-output => array : sortedLines
-    [line1,line2,line3]
-input => array : totalLines, number : headCount 
-    [line2,line1,line3]
-name => sortLinesInAlphabeticalOrder
+    [bcd,abc,cde]
+name => sortFileOnOptions
 
 -----------------------------------------------------
 
-[3] The previous step
+[0.3a] The previous step
 output => array : totalLines
-    [line1,line2,line3]
+    [bcd,abc,cde]
 input => string : contentOfFile
-    "line1\nline2\nline3"
+    "bcd\nabc\n cde"
 name => parseContentOfFile
 
 -----------------------------------------------------
 
-[4a] The previous step
-output => string : contentOfFile
-    "line1\nline2\nline3"
-input => path : filePath
-    one.txt
-name => loadFileContent
-------------------------------------
-
-[4b] The previous step
+[0.3b] The previous step
 output => stderr : error message
     "file not found"
 input => path : filePath
     one.text
-name => errorMessage
+name => DisplayErrorMessage
+
+-----------------------------------------------------
+[0.4] The previous step
+output => string : contentOfFile
+    "bcd\nabc\n cde"
+input => object : requiredArgs
+    {fileName:fileName,options:[]}
+name => loadFileContent
 
 ------------------------------------
 
-[5] starting step
-output => path : filePath
-    one.txt
+[0.5] The previous step
+output =>  object : requiredArgs
+    {fileName:fileName,options:[]}
 input => ArrayOfStrings : cmdArgs
     ["one.txt"]
-name => getFilePath
-
------------------------------------------------------
+name => parseUserArgs

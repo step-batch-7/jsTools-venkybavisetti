@@ -18,7 +18,6 @@ possibilities :
 2.node sort.js => it takes standard input and executive at last
   node sort.js
 
-
 3.node sort.js -n fileName => sort by numerical order
   node sort.js -n fileName
   node sort.js fileName -n
