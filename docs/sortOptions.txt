@@ -1,0 +1,59 @@
+sortUsage:
+  1.node sort.js fileName 
+  2.node sort.js -n fileName
+  3.node sort.js -r fileName
+  5.node sort.js -u fileName
+  6.node sort.js -o outputFile fileName
+  7.node sort.js -k 2 fileName
+  8.node sort.js -t',' -k2 fileName
+  9.cat fileName|node sort
+  10.sort
+
+
+possibilities 
+
+1.node sort.js fileName => sort by alphabetical order
+  node sort.js fileName
+
+2.node sort.js -n fileName => sort by numerical order
+  node sort.js -n fileName
+  node sort.js fileName -n
+
+3.node sort.js -r fileName => the sort command which sorts the input file in reverse order
+  node sort.js -r fileName
+  node sort.js fileName -r
+
+4.node sort.js -u fileName => sorts the file without duplications
+  node sort.js -u fileName
+  node sort.js fileName -u
+
+5.node sort.js -o fileName => redirect the output to another file
+  node sort.js -o outputFile fileName
+  node sort.js fileName -o fileName
+
+6.node sort.js -k 2 fileName => Use the -k option to sort on a certain column in a file
+  node sort.js -k 2 fileName
+  node sort.js fileName -k 2
+
+7.node sort.js -t 'separator' -k2 fileName => uses to separate columns for fields
+  node sort.js -t ',' -k 2 fileName
+  node sort.js -k 2 fileName -t ','
+  node sort.js -t ',' fileName -k 2
+  node sort.js -k 2 -t ',' fileName
+  node fileName fileName -k 2 -t ','
+
+8.cat fileName|node sort.js => when we give standard input to sort
+  cat fileName|node sort.js
+  echo "1\n2\n1"|node sort.js
+
+9.node sort.js => it takes standard input and executive at last
+  node sort.js
+
+
+
+
+
+
+
+
+
