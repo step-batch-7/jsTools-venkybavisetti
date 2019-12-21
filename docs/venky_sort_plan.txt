@@ -1,117 +1,8 @@
 ================================ ==> SORT <== ==================================
 sort is a command it sorts the require fields from the file.
 
-
-===========PLAN 1===================
-
--------------------------
-==>Flow:
-    1.We are setting default sorting the file as alphabetical
-    2.It takes 3rd arguments as file
-    3.Displays sorted lines of the file
-------------------------
-
----------------------------------------------------------
-Considering a blackBox of the sort:-
-
-command node sort.js file
-
-output:
-line1
-line2
-line3
-
-Which is a transformation of array of string to lines of text. (which our main function does)
----------------------------------------------------------
-
-========= The individual tasks=============>
-
 -----------------------------------------------------
------------------------------------------------------
-[1.1] The last step
-output => text: LinesToDisplay
-    line1
-    line2
-    line3
-input => array: sortedLines
-    [line1,line2,line3]
-name => arrangeLines
-
------------------------------------------------------
-
-[1.2] The previous step
-output => array : sortedLines
-    [line1,line2,line3]
-input => array : totalLines, number : headCount 
-    [line2,line1,line3]
-name => sortLinesInAlphabeticalOrder
-
------------------------------------------------------
-
-[1.3] The previous step
-output => array : totalLines
-    [line1,line2,line3]
-input => string : contentOfFile
-    "line1\nline2\nline3"
-name => parseContentOfFile
-
------------------------------------------------------
-
-[1.4a] The previous step
-output => string : contentOfFile
-    "line1\nline2\nline3"
-input => path : filePath
-    one.txt
-name => loadFileContent
-------------------------------------
-
-[1.4b] The previous step
-output => stderr : error message
-    "file not found"
-input => path : filePath
-    one.text
-name => errorMessage
-
-------------------------------------
-
-[1.5] starting step
-output => path : filePath
-    one.txt
-input => ArrayOfStrings : cmdArgs
-    ["one.txt"]
-name => getFilePath
-
------------------------------------------------------
------------------------------------------------------
-
-===========PLAN 2===================
-========= The individual tasks=============>
-
--------------------------
-==>Flow:
-    1.We are -n is given as 3rd arg sorting the file in numerical order
-    2.It takes 4rd arguments as file
-    3.Displays sorted lines of the file
-------------------------
-
----------------------------------------------------------
-Considering a blackBox of the sort:-
-
-command node sort.js -n file
-
-output:
-1
-2
-3
-
-Which is a transformation of array of string to lines of text. (which our main function does)
----------------------------------------------------------
-
-========= The individual tasks=============>
-
------------------------------------------------------
------------------------------------------------------
-[2.1] The last step
+[1] The last step
 output => text: LinesToDisplay
     1
     2
@@ -122,7 +13,7 @@ name => arrangeLines
 
 -----------------------------------------------------
 
-[2.2b] The previous step
+[2b] The previous step
 output => array : sortedLines
     [1,2,3]
 input => array : totalLines
@@ -130,7 +21,7 @@ input => array : totalLines
 name => sortLinesInNumericOrder
 
 -----------------------------------------------------
-[2.2a] The previous step
+[2a] The previous step
 output => array : sortedLines
     [line1,line2,line3]
 input => array : totalLines, number : headCount 
@@ -139,7 +30,7 @@ name => sortLinesInAlphabeticalOrder
 
 -----------------------------------------------------
 
-[2.3] The previous step
+[3] The previous step
 output => array : totalLines
     [line1,line2,line3]
 input => string : contentOfFile
@@ -148,7 +39,7 @@ name => parseContentOfFile
 
 -----------------------------------------------------
 
-[2.4a] The previous step
+[4a] The previous step
 output => string : contentOfFile
     "line1\nline2\nline3"
 input => path : filePath
@@ -156,7 +47,7 @@ input => path : filePath
 name => loadFileContent
 ------------------------------------
 
-[2.4b] The previous step
+[4b] The previous step
 output => stderr : error message
     "file not found"
 input => path : filePath
@@ -165,12 +56,11 @@ name => errorMessage
 
 ------------------------------------
 
-[2.5] starting step
+[5] starting step
 output => path : filePath
     one.txt
 input => ArrayOfStrings : cmdArgs
     ["one.txt"]
 name => getFilePath
 
------------------------------------------------------
 -----------------------------------------------------

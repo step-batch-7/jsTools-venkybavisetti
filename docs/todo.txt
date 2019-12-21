@@ -1,0 +1,16 @@
+sort features :
+  1.node sort.js fileName 
+  2.node sort.js -n fileName
+  3.node sort.js -r fileName
+  5.node sort.js -u fileName
+  6.node sort.js -o outputFile fileName
+  7.node sort.js -k 2 fileName
+  8.node sort.js -t',' -k2 fileName
+  9.cat fileName|node sort
+  10.sort
+
+v 0.1 :
+  1.node sort.js fileName
+  create all needed files & folders=> src,test,sort.js
+  get required packages => mocha,chai
+  make the connections between the files

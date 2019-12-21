@@ -1,4 +1,4 @@
-sortUsage:
+sort features :
   1.node sort.js fileName 
   2.node sort.js -n fileName
   3.node sort.js -r fileName
@@ -10,7 +10,7 @@ sortUsage:
   10.sort
 
 
-possibilities 
+possibilities :
 
 1.node sort.js fileName => sort by alphabetical order
   node sort.js fileName
@@ -48,12 +48,3 @@ possibilities
 
 9.node sort.js => it takes standard input and executive at last
   node sort.js
-
-
-
-
-
-
-
-
-
