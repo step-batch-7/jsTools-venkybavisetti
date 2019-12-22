@@ -19,5 +19,11 @@
   "bugs": {
     "url": "https://github.com/step-batch-7/jsTools-venkybavisetti/issues"
   },
-  "homepage": "https://github.com/step-batch-7/jsTools-venkybavisetti#readme"
+  "homepage": "https://github.com/step-batch-7/jsTools-venkybavisetti#readme",
+  "dependencies": {
+    "chai": "^4.2.0"
+  },
+  "devDependencies": {
+    "mocha": "^6.2.2"
+  }
 }

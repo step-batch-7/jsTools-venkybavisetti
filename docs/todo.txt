@@ -1,8 +1,8 @@
 v 0.1 :
   1.node sort.js fileName
-  create all needed files & folders=> src/sortLib.js,test/testSortLib.js,sort.js
-  get required packages => mocha,chai
-  make the connections between the files
+  --done--create all needed files & folders=> src/sortLib.js,test/testSortLib.js,sort.js
+  --done--get required packages => mocha,chai
+  --done--make the connections between the files
   appTest
 
 ---------------individual tasks----------
