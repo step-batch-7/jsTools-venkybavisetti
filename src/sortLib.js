@@ -1,8 +1,8 @@
 const parseUserArgs = function(cmdLineArgs) {
-  const requiredArgs = { options: [] };
+  const requiredArgs = { options: [], fileName: [] };
   cmdLineArgs.forEach(argument => {
+    if (!(argument[0] == "-")) requiredArgs.fileName.push(argument);
     if (argument[0] == "-") requiredArgs.options.push(argument);
-    requiredArgs.fileName = argument;
   });
   return requiredArgs;
 };
