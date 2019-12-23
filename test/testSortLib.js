@@ -45,3 +45,13 @@ describe("parseContentOfFile", function() {
     assert.deepStrictEqual(actual, expected);
   });
 });
+
+describe("sortFileOnOptions", function() {
+  it("should sort the file based on the options", function() {
+    const totalLines = ["bcd", "cde", "abc"];
+    const options = [];
+    const actual = sort.sortFileOnOptions(totalLines, options);
+    const expected = ["abc", "bcd", "cde"];
+    assert.deepStrictEqual(actual, expected);
+  });
+});

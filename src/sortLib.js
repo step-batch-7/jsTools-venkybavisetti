@@ -15,4 +15,15 @@ const parseContentOfFile = function(content) {
   return content.split("\n");
 };
 
-module.exports = { parseUserArgs, loadFileContent, parseContentOfFile };
+const sortFileOnOptions = function(totalLines, options) {
+  if (options.includes("-n")) totalLines.sort((a, b) => a - b);
+  else totalLines.sort();
+  return totalLines;
+};
+
+module.exports = {
+  parseUserArgs,
+  loadFileContent,
+  parseContentOfFile,
+  sortFileOnOptions
+};
