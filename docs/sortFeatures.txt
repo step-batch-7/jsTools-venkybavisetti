@@ -1,5 +1,5 @@
 sort features :
-  1.node sort.js fileName 
+  1.node sort.js fileName
   2.node sort.js
   3.node sort.js -n fileName
   4.node sort.js -r fileName

@@ -6,7 +6,9 @@ const main = function(cmdLineArgs) {
     readFile: fs.readFileSync,
     existsFile: fs.existsSync
   };
-  console.log(sort.performanceSortAction(cmdLineArgs, config));
+  const msg = sort.performanceSortAction(cmdLineArgs, config);
+  console.log(msg.output);
+  console.error(msg.error);
 };
 
 main(process.argv.slice(2));
