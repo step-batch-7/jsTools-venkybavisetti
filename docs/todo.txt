@@ -8,8 +8,6 @@ v 0.1 :
 ---------------individual tasks----------
 --done--parseUserArgs
 --done--loadFileContent
-DisplayErrorMessage
-parseContentOfFile
-sortFileOnOptions
-displayArrangedLines
+--done--parseContentOfFile
+--done--sortFileOnOptions
 ---------------------
