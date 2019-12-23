@@ -68,12 +68,12 @@ describe("sortFileOnOptions", function() {
     const totalLines = ["bcd", "cde", "abc"];
     const options = [];
     const actual = sort.sortFileOnOptions(totalLines, options);
-    const expected = ["abc", "bcd", "cde"];
+    const expected = "abc\nbcd\ncde";
     assert.deepStrictEqual(actual, expected);
   });
 });
 
-describe("performanceSortAction", function() {
+describe("performSortAction", function() {
   it("should perform sort on the file", function() {
     const readFile = function(path, fileType) {
       assert.strictEqual(path, "somePath");
@@ -86,7 +86,7 @@ describe("performanceSortAction", function() {
     };
     const config = { readFile, existsFile };
     const cmdLineArgs = ["somePath"];
-    const actual = sort.performanceSortAction(cmdLineArgs, config);
+    const actual = sort.performSortAction(cmdLineArgs, config);
     const expected = { output: "abc\nbcd\ncde", error: "" };
     assert.deepStrictEqual(actual, expected);
   });

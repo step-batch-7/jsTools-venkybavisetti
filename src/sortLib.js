@@ -1,20 +1,20 @@
 "use strict";
 
 const parseUserArgs = function(cmdLineArgs) {
-  const requiredArgs = {
+  const parsedUserArgs = {
     options: [],
     fileName: [],
     msg: { output: "", error: "" }
   };
   cmdLineArgs.forEach(argument => {
-    if (!(argument[0] === "-")) requiredArgs.fileName.push(argument);
-    else requiredArgs.options.push(argument);
+    if (!(argument[0] === "-")) parsedUserArgs.fileName.push(argument);
+    else parsedUserArgs.options.push(argument);
   });
-  return requiredArgs;
+  return parsedUserArgs;
 };
 
-const loadFileContent = function(userArgs, config) {
-  return config.readFile(userArgs.fileName[0], "utf8");
+const loadFileContent = function(userArgs, fileSystem) {
+  return fileSystem.readFile(userArgs.fileName[0], "utf8");
 };
 
 const parseContentOfFile = function(content) {
@@ -22,25 +22,26 @@ const parseContentOfFile = function(content) {
 };
 
 const sortFileOnOptions = function(totalLines, sortOptions) {
-  return totalLines.sort();
+  return totalLines.sort().join("\n");
 };
 
 const fileError = function() {
   return "sort: No such file or directory";
 };
 
-const performanceSortAction = function(cmdLineArgs, config) {
-  const userArgs = parseUserArgs(cmdLineArgs);
-  if (!config.existsFile(userArgs.fileName[0])) {
-    userArgs.msg.error = fileError();
-    return userArgs.msg;
+const performSortAction = function(cmdLineArgs, fileSystem) {
+  const parsedUserArgs = parseUserArgs(cmdLineArgs);
+  if (!fileSystem.existsFile(parsedUserArgs.fileName[0])) {
+    parsedUserArgs.msg.error = fileError();
+    return parsedUserArgs.msg;
   }
-  const content = loadFileContent(userArgs, config);
+  const content = loadFileContent(parsedUserArgs, fileSystem);
   const totalLines = parseContentOfFile(content);
-  userArgs.msg.output = sortFileOnOptions(totalLines, userArgs.options).join(
-    "\n"
+  parsedUserArgs.msg.output = sortFileOnOptions(
+    totalLines,
+    parsedUserArgs.options
   );
-  return userArgs.msg;
+  return parsedUserArgs.msg;
 };
 
 module.exports = {
@@ -48,6 +49,6 @@ module.exports = {
   loadFileContent,
   parseContentOfFile,
   sortFileOnOptions,
-  performanceSortAction,
+  performSortAction,
   fileError
 };
