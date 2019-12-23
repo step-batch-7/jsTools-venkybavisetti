@@ -55,3 +55,22 @@ describe("sortFileOnOptions", function() {
     assert.deepStrictEqual(actual, expected);
   });
 });
+
+describe("performanceSortAction", function() {
+  it("should perform sort on the file", function() {
+    const readFile = function(path, fileType) {
+      assert.strictEqual(path, "somePath");
+      assert.strictEqual(fileType, "utf8");
+      return "bcd\ncde\nabc";
+    };
+    const existsFile = function(path) {
+      assert.strictEqual(path, "somePath");
+      return true;
+    };
+    const config = { readFile, existsFile };
+    const cmdLineArgs = ["somePath"];
+    const actual = sort.performanceSortAction(cmdLineArgs, config);
+    const expected = "abc\nbcd\ncde";
+    assert.strictEqual(actual, expected);
+  });
+});

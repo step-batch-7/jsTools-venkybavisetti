@@ -8,6 +8,7 @@ v 0.1 :
 ---------------individual tasks----------
 --done--parseUserArgs
 --done--loadFileContent
+--done--DisplayErrorMessage
 --done--parseContentOfFile
 --done--sortFileOnOptions
 ---------------------
