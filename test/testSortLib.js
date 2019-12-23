@@ -48,24 +48,9 @@ describe("loadFileContent", function() {
   });
 });
 
-describe("parseContentOfFile", function() {
-  it("should get the content in an arrays", function() {
-    const content = "i\nam\ngood";
-    const actual = sort.parseContentOfFile(content);
-    const expected = ["i", "am", "good"];
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should get an empty array when file contains no content", function() {
-    const content = "";
-    const actual = sort.parseContentOfFile(content);
-    const expected = [""];
-    assert.deepStrictEqual(actual, expected);
-  });
-});
-
 describe("sortFileOnOptions", function() {
   it("should sort the file based on the options", function() {
-    const totalLines = ["bcd", "cde", "abc"];
+    const totalLines = "bcd\ncde\nabc";
     const options = [];
     const actual = sort.sortFileOnOptions(totalLines, options);
     const expected = "abc\nbcd\ncde";
@@ -88,6 +73,22 @@ describe("performSortAction", function() {
     const cmdLineArgs = ["somePath"];
     const actual = sort.performSortAction(cmdLineArgs, config);
     const expected = { output: "abc\nbcd\ncde", error: "" };
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should get error message when is not present file", function() {
+    const readFile = function(path, fileType) {
+      assert.strictEqual(path, "somePath");
+      assert.strictEqual(fileType, "utf8");
+      return "bcd\ncde\nabc";
+    };
+    const existsFile = function(path) {
+      assert.strictEqual(path, "somePath");
+      return false;
+    };
+    const config = { readFile, existsFile };
+    const cmdLineArgs = ["somePath"];
+    const actual = sort.performSortAction(cmdLineArgs, config);
+    const expected = { output: "", error: "sort: No such file or directory" };
     assert.deepStrictEqual(actual, expected);
   });
 });

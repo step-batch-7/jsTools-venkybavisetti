@@ -1,0 +1,8 @@
+node sort.js ./appTest/sortData/dataInAlp_v0_1.txt
+a
+b
+c
+d
+e
+f
+g

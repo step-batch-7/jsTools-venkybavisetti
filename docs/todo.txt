@@ -1,14 +1,4 @@
-v 0.1 :
-  1.node sort.js fileName
-  --done--create all needed files & folders=> src/sortLib.js,test/testSortLib.js,sort.js
-  --done--get required packages => mocha,chai
-  --done--make the connections between the files
-  --done--appTest
-
----------------individual tasks----------
---done--parseUserArgs
---done--loadFileContent
---done--DisplayErrorMessage
---done--parseContentOfFile
---done--sortFileOnOptions
----------------------
+v 0.2 :
+take input from stdin
+ bugs in v0.1
+ 

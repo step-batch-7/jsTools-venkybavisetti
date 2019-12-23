@@ -17,11 +17,8 @@ const loadFileContent = function(userArgs, fileSystem) {
   return fileSystem.readFile(userArgs.fileName[0], "utf8");
 };
 
-const parseContentOfFile = function(content) {
-  return content.split("\n");
-};
-
-const sortFileOnOptions = function(totalLines, sortOptions) {
+const sortFileOnOptions = function(content, sortOptions) {
+  const totalLines = content.split("\n");
   return totalLines.sort().join("\n");
 };
 
@@ -36,9 +33,8 @@ const performSortAction = function(cmdLineArgs, fileSystem) {
     return parsedUserArgs.msg;
   }
   const content = loadFileContent(parsedUserArgs, fileSystem);
-  const totalLines = parseContentOfFile(content);
   parsedUserArgs.msg.output = sortFileOnOptions(
-    totalLines,
+    content,
     parsedUserArgs.options
   );
   return parsedUserArgs.msg;
@@ -47,7 +43,6 @@ const performSortAction = function(cmdLineArgs, fileSystem) {
 module.exports = {
   parseUserArgs,
   loadFileContent,
-  parseContentOfFile,
   sortFileOnOptions,
   performSortAction,
   fileError
