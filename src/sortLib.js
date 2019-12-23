@@ -11,4 +11,8 @@ const loadFileContent = function(path, read) {
   return read(path, "utf8");
 };
 
-module.exports = { parseUserArgs, loadFileContent };
+const parseContentOfFile = function(content) {
+  return content.split("\n");
+};
+
+module.exports = { parseUserArgs, loadFileContent, parseContentOfFile };

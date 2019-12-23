@@ -30,3 +30,18 @@ describe("loadFileContent", function() {
     assert.strictEqual(actual, expected);
   });
 });
+
+describe("parseContentOfFile", function() {
+  it("should get the content in an arrays", function() {
+    const content = "i\nam\ngood";
+    const actual = sort.parseContentOfFile(content);
+    const expected = ["i", "am", "good"];
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should get an empty array when file contains no content", function() {
+    const content = "";
+    const actual = sort.parseContentOfFile(content);
+    const expected = [""];
+    assert.deepStrictEqual(actual, expected);
+  });
+});

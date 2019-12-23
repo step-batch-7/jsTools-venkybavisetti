@@ -7,7 +7,7 @@ v 0.1 :
 
 ---------------individual tasks----------
 --done--parseUserArgs
-loadFileContent
+--done--loadFileContent
 DisplayErrorMessage
 parseContentOfFile
 sortFileOnOptions
