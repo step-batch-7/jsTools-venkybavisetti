@@ -8,8 +8,7 @@ describe("parseUserArgs", function() {
     const actual = sort.parseUserArgs(cmdLineArgs);
     const expected = {
       options: ["-n"],
-      fileName: ["one.txt"],
-      msg: { output: "", error: "" }
+      fileName: ["one.txt"]
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -18,8 +17,7 @@ describe("parseUserArgs", function() {
     const actual = sort.parseUserArgs(cmdLineArgs);
     const expected = {
       options: ["-n"],
-      fileName: ["one.txt"],
-      msg: { output: "", error: "" }
+      fileName: ["one.txt"]
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -29,8 +27,7 @@ describe("loadFileContent", function() {
   it("should load the content in the file", function() {
     const userArgs = {
       options: ["-n"],
-      fileName: ["one.txt"],
-      msg: { output: "", error: "" }
+      fileName: ["one.txt"]
     };
     const readFile = function(path, fileType) {
       assert.strictEqual(path, "one.txt");
@@ -43,8 +40,8 @@ describe("loadFileContent", function() {
     };
     const config = { readFile, existsFile };
     const actual = sort.loadFileContent(userArgs, config);
-    const expected = "i am here";
-    assert.strictEqual(actual, expected);
+    const expected = { content: "i am here" };
+    assert.deepStrictEqual(actual, expected);
   });
 });
 
@@ -53,7 +50,7 @@ describe("sortFileOnOptions", function() {
     const totalLines = "bcd\ncde\nabc";
     const options = [];
     const actual = sort.sortFileOnOptions(totalLines, options);
-    const expected = "abc\nbcd\ncde";
+    const expected = { output: "abc\nbcd\ncde" };
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -72,7 +69,7 @@ describe("performSortAction", function() {
     const config = { readFile, existsFile };
     const cmdLineArgs = ["somePath"];
     const actual = sort.performSortAction(cmdLineArgs, config);
-    const expected = { output: "abc\nbcd\ncde", error: "" };
+    const expected = { output: "abc\nbcd\ncde" };
     assert.deepStrictEqual(actual, expected);
   });
   it("should get error message when is not present file", function() {
@@ -88,7 +85,7 @@ describe("performSortAction", function() {
     const config = { readFile, existsFile };
     const cmdLineArgs = ["somePath"];
     const actual = sort.performSortAction(cmdLineArgs, config);
-    const expected = { output: "", error: "sort: No such file or directory" };
+    const expected = { error: "sort: No such file or directory" };
     assert.deepStrictEqual(actual, expected);
   });
 });

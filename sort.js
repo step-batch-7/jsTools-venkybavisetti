@@ -2,13 +2,13 @@ const fs = require("fs");
 const sort = require("./src/sortLib.js").performSortAction;
 
 const main = function(cmdLineArgs) {
-  const config = {
+  const fileSystem = {
     readFile: fs.readFileSync,
     existsFile: fs.existsSync
   };
-  const msg = sort(cmdLineArgs, config);
-  process.stdout.write(msg.output);
-  process.stderr.write(msg.error);
+  const { output, error } = sort(cmdLineArgs, fileSystem);
+  output && process.stdout.write(output);
+  error && process.stderr.write(error);
 };
 
 main(process.argv.slice(2));

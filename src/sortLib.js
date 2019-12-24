@@ -3,8 +3,7 @@
 const parseUserArgs = function(cmdLineArgs) {
   const parsedUserArgs = {
     options: [],
-    fileName: [],
-    msg: { output: "", error: "" }
+    fileName: []
   };
   cmdLineArgs.forEach(argument => {
     if (!(argument[0] === "-")) parsedUserArgs.fileName.push(argument);
@@ -14,30 +13,30 @@ const parseUserArgs = function(cmdLineArgs) {
 };
 
 const loadFileContent = function(userArgs, fileSystem) {
-  return fileSystem.readFile(userArgs.fileName[0], "utf8");
+  const fsFileExits = isFileExists.bind(fileSystem);
+  if (!userArgs.fileName.every(fsFileExits)) return { error: fileError() };
+  return { content: fileSystem.readFile(userArgs.fileName[0], "utf8") };
 };
 
 const sortFileOnOptions = function(content, sortOptions) {
   const totalLines = content.split("\n");
-  return totalLines.sort().join("\n");
+  return { output: totalLines.sort().join("\n") };
 };
 
 const fileError = function() {
   return "sort: No such file or directory";
 };
 
+const isFileExists = function(path) {
+  return this.existsFile(path);
+};
+
 const performSortAction = function(cmdLineArgs, fileSystem) {
   const parsedUserArgs = parseUserArgs(cmdLineArgs);
-  if (!fileSystem.existsFile(parsedUserArgs.fileName[0])) {
-    parsedUserArgs.msg.error = fileError();
-    return parsedUserArgs.msg;
-  }
-  const content = loadFileContent(parsedUserArgs, fileSystem);
-  parsedUserArgs.msg.output = sortFileOnOptions(
-    content,
-    parsedUserArgs.options
-  );
-  return parsedUserArgs.msg;
+  let { content, error } = loadFileContent(parsedUserArgs, fileSystem);
+  if (error) return { error };
+  const { output } = sortFileOnOptions(content, parsedUserArgs.options);
+  return { output };
 };
 
 module.exports = {
