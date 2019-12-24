@@ -29,16 +29,16 @@ describe("loadFileContent", function() {
       options: ["-n"],
       fileNames: ["one.txt"]
     };
-    const readFile = function(path, fileType) {
+    const readFileSync = function(path, fileType) {
       assert.strictEqual(path, "one.txt");
       assert.strictEqual(fileType, "utf8");
       return "i am here";
     };
-    const existsFile = function(path) {
+    const existsSync = function(path) {
       assert.strictEqual(path, "one.txt");
       return true;
     };
-    const config = { readFile, existsFile };
+    const config = { readFileSync, existsSync };
     const actual = sort.loadFileContent(userArgs, config);
     const expected = { content: "i am here" };
     assert.deepStrictEqual(actual, expected);
@@ -53,39 +53,62 @@ describe("sortFileOnOptions", function() {
     const expected = { output: "abc\nbcd\ncde" };
     assert.deepStrictEqual(actual, expected);
   });
+  it("should give file options error when options are given", function() {
+    const totalLines = "bcd\ncde\nabc";
+    const options = ["-n"];
+    const actual = sort.sortFileOnOptions(totalLines, options);
+    const expected = { optionError: "sort: invalid options" };
+    assert.deepStrictEqual(actual, expected);
+  });
 });
 
 describe("performSortAction", function() {
   it("should perform sort on the file", function() {
-    const readFile = function(path, fileType) {
+    const readFileSync = function(path, fileType) {
       assert.strictEqual(path, "somePath");
       assert.strictEqual(fileType, "utf8");
       return "bcd\ncde\nabc";
     };
-    const existsFile = function(path) {
+    const existsSync = function(path) {
       assert.strictEqual(path, "somePath");
       return true;
     };
-    const config = { readFile, existsFile };
+    const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath"];
     const actual = sort.performSortAction(cmdLineArgs, config);
-    const expected = { output: "abc\nbcd\ncde" };
+    const expected = { output: "abc\nbcd\ncde", error: "" };
     assert.deepStrictEqual(actual, expected);
   });
   it("should get error message when is not present file", function() {
-    const readFile = function(path, fileType) {
+    const readFileSync = function(path, fileType) {
       assert.strictEqual(path, "somePath");
       assert.strictEqual(fileType, "utf8");
       return "bcd\ncde\nabc";
     };
-    const existsFile = function(path) {
+    const existsSync = function(path) {
       assert.strictEqual(path, "somePath");
       return false;
     };
-    const config = { readFile, existsFile };
+    const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath"];
     const actual = sort.performSortAction(cmdLineArgs, config);
-    const expected = { error: "sort: No such file or directory" };
+    const expected = { error: "sort: No such file or directory", output: "" };
+    assert.deepStrictEqual(actual, expected);
+  });
+  it("should get error message when options are present", function() {
+    const readFileSync = function(path, fileType) {
+      assert.strictEqual(path, "somePath");
+      assert.strictEqual(fileType, "utf8");
+      return "bcd\ncde\nabc";
+    };
+    const existsSync = function(path) {
+      assert.strictEqual(path, "somePath");
+      return true;
+    };
+    const config = { readFileSync, existsSync };
+    const cmdLineArgs = ["somePath", "-n"];
+    const actual = sort.performSortAction(cmdLineArgs, config);
+    const expected = { error: "sort: invalid options", output: "" };
     assert.deepStrictEqual(actual, expected);
   });
 });

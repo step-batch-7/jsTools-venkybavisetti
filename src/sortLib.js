@@ -1,26 +1,26 @@
 "use strict";
 
 const parseUserArgs = function(cmdLineArgs) {
-  const parsedUserArgs = {
+  const parsedSortArgs = {
     options: [],
     fileNames: []
   };
   cmdLineArgs.forEach(argument => {
-    if (!(argument[0] === "-")) parsedUserArgs.fileNames.push(argument);
-    else parsedUserArgs.options.push(argument);
+    if (!(argument[0] === "-")) parsedSortArgs.fileNames.push(argument);
+    else parsedSortArgs.options.push(argument);
   });
-  return parsedUserArgs;
+  return parsedSortArgs;
 };
 
-const loadFileContent = function(userArgs, fileSystem) {
-  const fsFileExits = isFileExists.bind(fileSystem);
-  if (!userArgs.fileNames.every(fsFileExits)) return { error: fileError() };
-  const content = fileSystem.readFile(userArgs.fileNames[0], "utf8");
+const loadFileContent = function(userArgs, fileHandlingFuncs) {
+  const fsFileExits = isFileExists.bind(fileHandlingFuncs);
+  if (!userArgs.fileNames.every(fsFileExits)) return { fileError: fileError() };
+  const content = fileHandlingFuncs.readFileSync(userArgs.fileNames[0], "utf8");
   return { content };
 };
 
 const sortFileOnOptions = function(content, sortOptions) {
-  if (!sortOptions.every(isValidOption)) return { error: optionsError() };
+  if (!sortOptions.every(isValidOption)) return { optionError: optionError() };
   const totalLines = content.split("\n");
   return { output: totalLines.sort().join("\n") };
 };
@@ -30,7 +30,7 @@ const isValidOption = function(option) {
   return options.includes(option);
 };
 
-const optionsError = function() {
+const optionError = function() {
   return "sort: invalid options";
 };
 
@@ -39,16 +39,16 @@ const fileError = function() {
 };
 
 const isFileExists = function(path) {
-  return this.existsFile(path);
+  return this.existsSync(path);
 };
 
-const performSortAction = function(cmdLineArgs, fileSystem) {
-  const parsedUserArgs = parseUserArgs(cmdLineArgs);
-  let { content, error } = loadFileContent(parsedUserArgs, fileSystem);
-  if (error) return { error };
-  let sortedFile = sortFileOnOptions(content, parsedUserArgs.options);
-  if (sortedFile.error) return { error: sortedFile.error };
-  return { output: sortedFile.output };
+const performSortAction = function(cmdLineArgs, fileHandlingFuncs) {
+  const parsedSortArgs = parseUserArgs(cmdLineArgs);
+  let { content, fileError } = loadFileContent(parsedSortArgs, fileHandlingFuncs);
+  if (fileError) return { error: fileError, output: String() };
+  let { output, optionError } = sortFileOnOptions(content, parsedSortArgs.options);
+  if (optionError) return { error: optionError, output: String() };
+  return { output, error: String() };
 };
 
 module.exports = {

@@ -1,4 +1,6 @@
 v 0.2 :
-take input from stdin
- bugs in v0.1
+1.take input from stdin
+2.should take stdin in load contentFile function
+
+bugs in v0.1
  
