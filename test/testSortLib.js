@@ -8,7 +8,7 @@ describe("parseUserArgs", function() {
     const actual = sort.parseUserArgs(cmdLineArgs);
     const expected = {
       options: ["-n"],
-      fileName: ["one.txt"]
+      fileNames: ["one.txt"]
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -17,7 +17,7 @@ describe("parseUserArgs", function() {
     const actual = sort.parseUserArgs(cmdLineArgs);
     const expected = {
       options: ["-n"],
-      fileName: ["one.txt"]
+      fileNames: ["one.txt"]
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -27,7 +27,7 @@ describe("loadFileContent", function() {
   it("should load the content in the file", function() {
     const userArgs = {
       options: ["-n"],
-      fileName: ["one.txt"]
+      fileNames: ["one.txt"]
     };
     const readFile = function(path, fileType) {
       assert.strictEqual(path, "one.txt");

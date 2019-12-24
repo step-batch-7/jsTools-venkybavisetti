@@ -3,10 +3,10 @@
 const parseUserArgs = function(cmdLineArgs) {
   const parsedUserArgs = {
     options: [],
-    fileName: []
+    fileNames: []
   };
   cmdLineArgs.forEach(argument => {
-    if (!(argument[0] === "-")) parsedUserArgs.fileName.push(argument);
+    if (!(argument[0] === "-")) parsedUserArgs.fileNames.push(argument);
     else parsedUserArgs.options.push(argument);
   });
   return parsedUserArgs;
@@ -14,21 +14,24 @@ const parseUserArgs = function(cmdLineArgs) {
 
 const loadFileContent = function(userArgs, fileSystem) {
   const fsFileExits = isFileExists.bind(fileSystem);
-  if (!userArgs.fileName.every(fsFileExits)) return { error: fileError() };
-  const content = fileSystem.readFile(userArgs.fileName[0], "utf8");
+  if (!userArgs.fileNames.every(fsFileExits)) return { error: fileError() };
+  const content = fileSystem.readFile(userArgs.fileNames[0], "utf8");
   return { content };
 };
 
 const sortFileOnOptions = function(content, sortOptions) {
-  if (!sortOptions.every(isValidOption))
-    return { error: "sort: invalid options" };
+  if (!sortOptions.every(isValidOption)) return { error: optionsError() };
   const totalLines = content.split("\n");
   return { output: totalLines.sort().join("\n") };
 };
 
 const isValidOption = function(option) {
   const options = [];
-  options.includes(option);
+  return options.includes(option);
+};
+
+const optionsError = function() {
+  return "sort: invalid options";
 };
 
 const fileError = function() {
