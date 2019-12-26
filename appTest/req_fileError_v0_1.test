@@ -1,0 +1,2 @@
+node sort.js ./appTest/sortData/badFile
+sort: No such file or directory
