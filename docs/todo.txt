@@ -1,6 +1,25 @@
+v 0.1 :
+1.node sort.js fileName
+  --done--create all needed files & folders=> src/sortLib.js,test/testSortLib.js,sort.js
+  --done--get required packages => mocha,chai
+  --done--make the connections between the files
+  --done--appTest
+
+---------------individual tasks----------
+--done--parseUserArgs
+--done--loadFileContent
+--done--parseContentOfFile
+--done--sortFileOnOptions
+---------------------
+
 v 0.2 :
-1.take input from stdin
-2.should take stdin in load contentFile function
+2.node sort.js
+  take input from stdin
+  this function will run on asynchronously
+
+--------------individual tasks------------------
+  loadStdinContent => works on the asynchronously
+  sortStdinContent => callback
 
 bugs in v0.1
  

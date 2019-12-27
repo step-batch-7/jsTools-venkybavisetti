@@ -1,10 +1,9 @@
 const fs = require("fs");
-const sort = require("./src/sortLib.js").performSortAction;
-const { stderr, stdout, stdin } = process;
+const sort = require("./src/sortLib.js").sort;
+const { stderr, stdout } = process;
 
 const main = function(cmdLineArgs) {
-  const fileHandlingFuncs = fs;
-  const { output, error } = sort(cmdLineArgs, fileHandlingFuncs, stdin);
+  const { output, error } = sort(cmdLineArgs, fs);
   stdout.write(output);
   stderr.write(error);
 };

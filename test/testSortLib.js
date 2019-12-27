@@ -57,12 +57,12 @@ describe("sortFileOnOptions", function() {
     const totalLines = "bcd\ncde\nabc";
     const options = ["-n"];
     const actual = sort.sortFileOnOptions(totalLines, options);
-    const expected = { optionError: "sort: invalid options" };
+    const expected = { error: "sort: invalid options" };
     assert.deepStrictEqual(actual, expected);
   });
 });
 
-describe("performSortAction", function() {
+describe("sort", function() {
   it("should perform sort on the file", function() {
     const readFileSync = function(path, fileType) {
       assert.strictEqual(path, "somePath");
@@ -75,7 +75,7 @@ describe("performSortAction", function() {
     };
     const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath"];
-    const actual = sort.performSortAction(cmdLineArgs, config);
+    const actual = sort.sort(cmdLineArgs, config);
     const expected = { output: "abc\nbcd\ncde", error: "" };
     assert.deepStrictEqual(actual, expected);
   });
@@ -91,7 +91,7 @@ describe("performSortAction", function() {
     };
     const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath"];
-    const actual = sort.performSortAction(cmdLineArgs, config);
+    const actual = sort.sort(cmdLineArgs, config);
     const expected = { error: "sort: No such file or directory", output: "" };
     assert.deepStrictEqual(actual, expected);
   });
@@ -107,16 +107,8 @@ describe("performSortAction", function() {
     };
     const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath", "-n"];
-    const actual = sort.performSortAction(cmdLineArgs, config);
+    const actual = sort.sort(cmdLineArgs, config);
     const expected = { error: "sort: invalid options", output: "" };
     assert.deepStrictEqual(actual, expected);
-  });
-});
-
-describe("fileError", function() {
-  it("should get error msg for file", function() {
-    const actual = sort.fileError();
-    const expected = "sort: No such file or directory";
-    assert.strictEqual(actual, expected);
   });
 });

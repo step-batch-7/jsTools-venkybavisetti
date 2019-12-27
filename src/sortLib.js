@@ -12,49 +12,53 @@ const parseUserArgs = function(cmdLineArgs) {
   return parsedSortArgs;
 };
 
-const loadFileContent = function(userArgs, fileHandlingFuncs) {
-  const fsFileExits = isFileExists.bind(fileHandlingFuncs);
-  if (!userArgs.fileNames.every(fsFileExits)) return { fileError: fileError() };
-  const content = fileHandlingFuncs.readFileSync(userArgs.fileNames[0], "utf8");
+const loadFileContent = function(userArgs, fs) {
+  const fsFileExits = isFileExists.bind(fs);
+  if (!userArgs.fileNames.every(fsFileExits)) {
+    return { error: generateErrorMsg("fileError") };
+  }
+  const content = fs.readFileSync(userArgs.fileNames[0], "utf8");
   return { content };
 };
 
 const sortFileOnOptions = function(content, sortOptions) {
-  if (!sortOptions.every(isValidOption)) return { optionError: optionError() };
+  if (!(sortOptions.length == 0)) {
+    return { error: generateErrorMsg("optionError") };
+  }
   const totalLines = content.split("\n");
   return { output: totalLines.sort().join("\n") };
 };
 
-const isValidOption = function(option) {
-  const options = [];
-  return options.includes(option);
-};
-
-const optionError = function() {
-  return "sort: invalid options";
-};
-
-const fileError = function() {
-  return "sort: No such file or directory";
+const generateErrorMsg = function(errorType) {
+  const errorMsg = {
+    optionError: "sort: invalid options",
+    fileError: "sort: No such file or directory"
+  };
+  return errorMsg[errorType];
 };
 
 const isFileExists = function(path) {
   return this.existsSync(path);
 };
 
-const performSortAction = function(cmdLineArgs, fileHandlingFuncs) {
+const sort = function(cmdLineArgs, fs) {
   const parsedSortArgs = parseUserArgs(cmdLineArgs);
-  let { content, fileError } = loadFileContent(parsedSortArgs, fileHandlingFuncs);
-  if (fileError) return { error: fileError, output: String() };
-  let { output, optionError } = sortFileOnOptions(content, parsedSortArgs.options);
-  if (optionError) return { error: optionError, output: String() };
-  return { output, error: String() };
+  let fileContent = loadFileContent(parsedSortArgs, fs);
+  if (fileContent.error) {
+    return { error: fileContent.error, output: String() };
+  }
+
+  let sortedContent = sortFileOnOptions(fileContent.content, parsedSortArgs.options);
+  if (sortedContent.error) {
+    return { error: sortedContent.error, output: String() };
+  }
+
+  return { output: sortedContent.output, error: String() };
 };
 
 module.exports = {
   parseUserArgs,
   loadFileContent,
   sortFileOnOptions,
-  performSortAction,
-  fileError
+  sort
 };
