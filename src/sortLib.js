@@ -41,7 +41,7 @@ const isFileExists = function(path) {
   return this.existsSync(path);
 };
 
-const sort = function(cmdLineArgs, fs) {
+const performSort = function(cmdLineArgs, fs) {
   const parsedSortArgs = parseUserArgs(cmdLineArgs);
   let fileContent = loadFileContent(parsedSortArgs, fs);
   if (fileContent.error) {
@@ -60,5 +60,5 @@ module.exports = {
   parseUserArgs,
   loadFileContent,
   sortFileOnOptions,
-  sort
+  performSort
 };

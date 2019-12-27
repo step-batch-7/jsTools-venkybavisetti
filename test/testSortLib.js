@@ -62,7 +62,7 @@ describe("sortFileOnOptions", function() {
   });
 });
 
-describe("sort", function() {
+describe("performSort", function() {
   it("should perform sort on the file", function() {
     const readFileSync = function(path, fileType) {
       assert.strictEqual(path, "somePath");
@@ -75,7 +75,7 @@ describe("sort", function() {
     };
     const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath"];
-    const actual = sort.sort(cmdLineArgs, config);
+    const actual = sort.performSort(cmdLineArgs, config);
     const expected = { output: "abc\nbcd\ncde", error: "" };
     assert.deepStrictEqual(actual, expected);
   });
@@ -91,7 +91,7 @@ describe("sort", function() {
     };
     const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath"];
-    const actual = sort.sort(cmdLineArgs, config);
+    const actual = sort.performSort(cmdLineArgs, config);
     const expected = { error: "sort: No such file or directory", output: "" };
     assert.deepStrictEqual(actual, expected);
   });
@@ -107,7 +107,7 @@ describe("sort", function() {
     };
     const config = { readFileSync, existsSync };
     const cmdLineArgs = ["somePath", "-n"];
-    const actual = sort.sort(cmdLineArgs, config);
+    const actual = sort.performSort(cmdLineArgs, config);
     const expected = { error: "sort: invalid options", output: "" };
     assert.deepStrictEqual(actual, expected);
   });

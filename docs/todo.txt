@@ -18,8 +18,9 @@ v 0.2 :
   this function will run on asynchronously
 
 --------------individual tasks------------------
-  loadStdinContent => works on the asynchronously
-  sortStdinContent => callback
+  performSortOnStdin => works on the asynchronously
+  //i will pass stdout and stderr reference from main 
+  //this function will branch in sudo main and calls sortContent function
 
 bugs in v0.1
  
