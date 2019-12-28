@@ -25,6 +25,15 @@ describe("sortOnFile", function() {
     };
     sort.sortOnFile(error, content, printOutput);
   });
+  it("should give file error when the error argument is given", function() {
+    const error = true;
+    const content = undefined;
+    const printOutput = function(sortResult) {
+      assert.strictEqual(sortResult.output, "");
+      assert.strictEqual(sortResult.error, "sort: No such file or directory");
+    };
+    sort.sortOnFile(error, content, printOutput);
+  });
 });
 
 describe("sortOnContent", function() {
