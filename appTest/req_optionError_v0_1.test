@@ -1,2 +1,0 @@
-node sort.js ./appTest/sortData/dataInAlpWordsFor_v0_1.txt -p
-sort: invalid options
