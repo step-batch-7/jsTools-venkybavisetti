@@ -16,13 +16,13 @@ const sortOnContent = function(content) {
   return totalLines.sort().join("\n");
 };
 
-const sortOnFile = function(error, contents, printOutput) {
+const sortOnFile = function(error, content, printOutput) {
   if (error) {
     const error = generateErrorMsg("fileError");
     printOutput({ error, output: "" });
     return;
   }
-  const sortedContent = sortOnContent(contents);
+  const sortedContent = sortOnContent(content);
   printOutput({ error: "", output: sortedContent });
 };
 

@@ -16,24 +16,14 @@ describe("parseUserArgs", function() {
 });
 
 describe("sortOnFile", function() {
-  it("should load the content in the file", function() {
-    const userArgs = {
-      options: ["-n"],
-      fileNames: ["one.txt"]
+  it("should give sorted file when is no error", function() {
+    const error = false;
+    const content = "b\na\nc";
+    const printOutput = function(sortResult) {
+      assert.deepStrictEqual(sortResult.output, "a\nb\nc");
+      assert.strictEqual(sortResult.error, "");
     };
-    const readFileSync = function(path, fileType) {
-      assert.strictEqual(path, "one.txt");
-      assert.strictEqual(fileType, "utf8");
-      return "i am here";
-    };
-    const existsSync = function(path) {
-      assert.strictEqual(path, "one.txt");
-      return true;
-    };
-    const config = { readFileSync, existsSync };
-    const actual = sort.loadFileContent(userArgs, config);
-    const expected = { content: "i am here" };
-    assert.deepStrictEqual(actual, expected);
+    sort.sortOnFile(error, content, printOutput);
   });
 });
 
@@ -69,7 +59,7 @@ describe("performSort", function() {
     sort.performSort(argv, fs, printOutput);
   });
 
-  it("should give no such file error if file is not present in the given path", () => {
+  it("should give file error when file is not present", () => {
     const argv = ["somePath"];
 
     const printOutput = function(sortResult) {
