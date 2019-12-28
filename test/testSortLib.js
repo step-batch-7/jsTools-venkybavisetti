@@ -4,20 +4,10 @@ const sort = require("../src/sortLib.js");
 
 describe("parseUserArgs", function() {
   it("should separate options and fileName", function() {
-    const cmdLineArgs = ["-n", "one.txt"];
+    const cmdLineArgs = ["one.txt"];
     const actual = sort.parseUserArgs(cmdLineArgs);
     const expected = {
-      options: ["-n"],
-      fileNames: ["one.txt"]
-    };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should separate options and fileName when in reverse order", function() {
-    const cmdLineArgs = ["one.txt", "-n"];
-    const actual = sort.parseUserArgs(cmdLineArgs);
-    const expected = {
-      options: ["-n"],
-      fileNames: ["one.txt"]
+      fileName: "one.txt"
     };
     assert.deepStrictEqual(actual, expected);
   });
@@ -45,19 +35,17 @@ describe("loadFileContent", function() {
   });
 });
 
-describe("sortFileOnOptions", function() {
-  it("should sort the file based on the options", function() {
-    const totalLines = "bcd\ncde\nabc";
-    const options = [];
-    const actual = sort.sortFileOnOptions(totalLines, options);
-    const expected = { output: "abc\nbcd\ncde" };
+describe("sortOnContent", function() {
+  it("should sort the file based on the content", function() {
+    const content = "bcd\ncde\nabc";
+    const actual = sort.sortOnContent(content);
+    const expected = "abc\nbcd\ncde";
     assert.deepStrictEqual(actual, expected);
   });
-  it("should give file options error when options are given", function() {
-    const totalLines = "bcd\ncde\nabc";
-    const options = ["-n"];
-    const actual = sort.sortFileOnOptions(totalLines, options);
-    const expected = { error: "sort: invalid options" };
+  it("should sort the file when file is empty", function() {
+    const content = "";
+    const actual = sort.sortOnContent(content);
+    const expected = "";
     assert.deepStrictEqual(actual, expected);
   });
 });
@@ -110,5 +98,13 @@ describe("performSort", function() {
     const actual = sort.performSort(cmdLineArgs, config);
     const expected = { error: "sort: invalid options", output: "" };
     assert.deepStrictEqual(actual, expected);
+  });
+});
+
+describe("generateErrorMsg", function() {
+  it("should get file error", function() {
+    const actual = sort.generateErrorMsg("fileError");
+    const expected = "sort: No such file or directory";
+    assert.strictEqual(actual, expected);
   });
 });

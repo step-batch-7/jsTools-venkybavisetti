@@ -33,5 +33,9 @@ const performSort = function(cmdLineArgs, fs, printOutput) {
 };
 
 module.exports = {
-  performSort
+  performSort,
+  sortOnFile,
+  sortOnContent,
+  parseUserArgs,
+  generateErrorMsg
 };
