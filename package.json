@@ -7,7 +7,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha",
+    "cover": "nyc mocha",
+    "coverage": "nyc --reporter html mocha && open coverage/index.html",
+    "alltests": "npm test && ./runAppTests.sh appTests/*.test",
+    "lint": "eslint src test sort.js"
   },
   "repository": {
     "type": "git",
