@@ -72,7 +72,10 @@ describe("performSort", function() {
     const argv = ["somePath"];
 
     const printOutput = function(sortResult) {
-      assert.deepStrictEqual(sortResult.error, "sort: No such file or directory");
+      assert.deepStrictEqual(
+        sortResult.error,
+        "sort: No such file or directory"
+      );
       assert.strictEqual(sortResult.output, "");
     };
     const fs = {
