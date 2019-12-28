@@ -16,20 +16,21 @@ const sortOnContent = function(content) {
   return totalLines.sort().join("\n");
 };
 
-const sortOnFile = function(error, contents) {
+const sortOnFile = function(error, contents, printOutput) {
   if (error) {
     const error = generateErrorMsg("fileError");
-    this.printOutput({ error, output: "" });
+    printOutput({ error, output: "" });
     return;
   }
   const sortedContent = sortOnContent(contents);
-  this.printOutput({ error: "", output: sortedContent });
+  printOutput({ error: "", output: sortedContent });
 };
 
 const performSort = function(cmdLineArgs, fs, printOutput) {
   const parsedSortArgs = parseUserArgs(cmdLineArgs);
-  const performSortAfterRead = sortOnFile.bind({ printOutput });
-  fs.readFile(parsedSortArgs.fileName, "utf8", performSortAfterRead);
+  fs.readFile(parsedSortArgs.fileName, "utf8", (error, content) =>
+    sortOnFile(error, content, printOutput)
+  );
 };
 
 module.exports = {

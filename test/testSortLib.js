@@ -1,6 +1,8 @@
+"use strict";
+
 const { assert } = require("chai");
 const sort = require("../src/sortLib.js");
-("use strict");
+const sinon = require("sinon");
 
 describe("parseUserArgs", function() {
   it("should separate options and fileName", function() {
@@ -13,7 +15,7 @@ describe("parseUserArgs", function() {
   });
 });
 
-describe("loadFileContent", function() {
+describe("sortOnFile", function() {
   it("should load the content in the file", function() {
     const userArgs = {
       options: ["-n"],
@@ -51,53 +53,37 @@ describe("sortOnContent", function() {
 });
 
 describe("performSort", function() {
-  it("should perform sort on the file", function() {
-    const readFileSync = function(path, fileType) {
-      assert.strictEqual(path, "somePath");
-      assert.strictEqual(fileType, "utf8");
-      return "bcd\ncde\nabc";
+  it("should call callback for readFile", () => {
+    const argv = ["somePath"];
+    const printOutput = function(sortResult) {
+      assert.deepStrictEqual(sortResult.output, "a\nb\nc");
+      assert.strictEqual(sortResult.error, "");
     };
-    const existsSync = function(path) {
-      assert.strictEqual(path, "somePath");
-      return true;
+    const fs = {
+      readFile: function(path, encoding, callback) {
+        assert.deepStrictEqual(path, "somePath");
+        assert.deepStrictEqual(encoding, "utf8");
+        callback(null, "a\nc\nb");
+      }
     };
-    const config = { readFileSync, existsSync };
-    const cmdLineArgs = ["somePath"];
-    const actual = sort.performSort(cmdLineArgs, config);
-    const expected = { output: "abc\nbcd\ncde", error: "" };
-    assert.deepStrictEqual(actual, expected);
+    sort.performSort(argv, fs, printOutput);
   });
-  it("should get error message when is not present file", function() {
-    const readFileSync = function(path, fileType) {
-      assert.strictEqual(path, "somePath");
-      assert.strictEqual(fileType, "utf8");
-      return "bcd\ncde\nabc";
+
+  it("should give no such file error if file is not present in the given path", () => {
+    const argv = ["somePath"];
+
+    const printOutput = function(sortResult) {
+      assert.deepStrictEqual(sortResult.error, "sort: No such file or directory");
+      assert.strictEqual(sortResult.output, "");
     };
-    const existsSync = function(path) {
-      assert.strictEqual(path, "somePath");
-      return false;
+    const fs = {
+      readFile: function(path, encoding, callback) {
+        assert.deepStrictEqual(path, "somePath");
+        assert.deepStrictEqual(encoding, "utf8");
+        callback(true, undefined);
+      }
     };
-    const config = { readFileSync, existsSync };
-    const cmdLineArgs = ["somePath"];
-    const actual = sort.performSort(cmdLineArgs, config);
-    const expected = { error: "sort: No such file or directory", output: "" };
-    assert.deepStrictEqual(actual, expected);
-  });
-  it("should get error message when options are present", function() {
-    const readFileSync = function(path, fileType) {
-      assert.strictEqual(path, "somePath");
-      assert.strictEqual(fileType, "utf8");
-      return "bcd\ncde\nabc";
-    };
-    const existsSync = function(path) {
-      assert.strictEqual(path, "somePath");
-      return true;
-    };
-    const config = { readFileSync, existsSync };
-    const cmdLineArgs = ["somePath", "-n"];
-    const actual = sort.performSort(cmdLineArgs, config);
-    const expected = { error: "sort: invalid options", output: "" };
-    assert.deepStrictEqual(actual, expected);
+    sort.performSort(argv, fs, printOutput);
   });
 });
 

@@ -23,6 +23,7 @@ v 0.2 :
   //this function will branch in sudo main and calls sortContent function
 
 bugs in v0.1
-  covert file reading to asynchronously
-  
+  --done--covert file reading to asynchronously
+  test the asynchronously reading file
+
  

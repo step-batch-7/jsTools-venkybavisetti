@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/step-batch-7/jsTools-venkybavisetti#readme",
   "dependencies": {
-    "chai": "^4.2.0"
+    "chai": "^4.2.0",
+    "sinon": "^8.0.1"
   },
   "devDependencies": {
     "mocha": "^6.2.2"
