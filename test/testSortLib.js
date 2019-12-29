@@ -2,6 +2,7 @@
 
 const { assert } = require('chai');
 const sort = require('../src/sortLib.js');
+const sinon = require('sinon');
 
 describe('parseUserArgs', function() {
   it('should separate options and fileName', function() {
@@ -57,13 +58,15 @@ describe('performSort', function() {
       assert.deepStrictEqual(sortResult.output, 'a\nb\nc');
       assert.strictEqual(sortResult.error, '');
     };
-    const fs = {
-      readFile: function(path, encoding, callback) {
-        assert.deepStrictEqual(path, 'somePath');
-        assert.deepStrictEqual(encoding, 'utf8');
-        callback(null, 'a\nc\nb');
-      }
-    };
+    const readFile = sinon.fake.yields(null, 'a\nc\nb');
+    const fs = { readFile };
+    // const fs = {
+    //   readFile: function(path, encoding, callback) {
+    //     assert.deepStrictEqual(path, 'somePath');
+    //     assert.deepStrictEqual(encoding, 'utf8');
+    //     callback(null, 'a\nc\nb');
+    //   }
+    // };
     sort.performSort(argv, fs, printOutput);
   });
 
@@ -77,13 +80,15 @@ describe('performSort', function() {
       );
       assert.strictEqual(sortResult.output, '');
     };
-    const fs = {
-      readFile: function(path, encoding, callback) {
-        assert.deepStrictEqual(path, 'somePath');
-        assert.deepStrictEqual(encoding, 'utf8');
-        callback(true, undefined);
-      }
-    };
+    const readFile = sinon.fake.yields(true, undefined);
+    const fs = { readFile };
+    // const fs = {
+    //   readFile: function(path, encoding, callback) {
+    //     assert.deepStrictEqual(path, 'somePath');
+    //     assert.deepStrictEqual(encoding, 'utf8');
+    //     callback(true, undefined);
+    //   }
+    // };
     sort.performSort(argv, fs, printOutput);
   });
 });
