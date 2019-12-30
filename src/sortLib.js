@@ -28,6 +28,7 @@ const sortOnFile = function(error, content, printOutput) {
 };
 
 const sortOnStdin = function(stdin, printOutput) {
+  stdin.setEncoding('utf8');
   let inputStreamText = '';
   stdin.on('data', data => {
     inputStreamText += data;
@@ -56,5 +57,6 @@ module.exports = {
   sortOnFile,
   sortOnContent,
   parseUserArgs,
-  generateErrorMsg
+  generateErrorMsg,
+  sortOnStdin
 };

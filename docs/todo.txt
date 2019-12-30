@@ -26,7 +26,5 @@ bugs in v0.1
   --done--covert file reading to asynchronously
   --done--test the asynchronously reading file
   test the stdin Content
-
-
-
+  set the exit code in the error msg
  

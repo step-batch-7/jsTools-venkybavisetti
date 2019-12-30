@@ -19,20 +19,21 @@ describe('sortOnFile', function() {
   it('should give sorted file when is no error', function() {
     const error = false;
     const content = 'b\na\nc';
-    const printOutput = function(sortResult) {
-      assert.deepStrictEqual(sortResult.output, 'a\nb\nc');
-      assert.strictEqual(sortResult.error, '');
-    };
+    const printOutput = sinon.spy();
     sort.sortOnFile(error, content, printOutput);
+    assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
   it('should give file error when the error argument is given', function() {
     const error = true;
     const content = undefined;
-    const printOutput = function(sortResult) {
-      assert.strictEqual(sortResult.output, '');
-      assert.strictEqual(sortResult.error, 'sort: No such file or directory');
-    };
+    const printOutput = sinon.spy();
     sort.sortOnFile(error, content, printOutput);
+    assert.isTrue(
+      printOutput.calledWith({
+        error: 'sort: No such file or directory',
+        output: ''
+      })
+    );
   });
 });
 
@@ -54,32 +55,16 @@ describe('sortOnContent', function() {
 describe('performSort', function() {
   it('should call callback for readFile', () => {
     const argv = ['somePath'];
-    const printOutput = function(sortResult) {
-      assert.deepStrictEqual(sortResult.output, 'a\nb\nc');
-      assert.strictEqual(sortResult.error, '');
-    };
+    const printOutput = sinon.spy();
     const readFile = sinon.fake.yields(null, 'a\nc\nb');
     const fs = { readFile };
-    // const fs = {
-    //   readFile: function(path, encoding, callback) {
-    //     assert.deepStrictEqual(path, 'somePath');
-    //     assert.deepStrictEqual(encoding, 'utf8');
-    //     callback(null, 'a\nc\nb');
-    //   }
-    // };
     sort.performSort(argv, fs, printOutput);
+    assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 
   it('should give file error when file is not present', () => {
     const argv = ['somePath'];
-
-    const printOutput = function(sortResult) {
-      assert.deepStrictEqual(
-        sortResult.error,
-        'sort: No such file or directory'
-      );
-      assert.strictEqual(sortResult.output, '');
-    };
+    const printOutput = sinon.spy();
     const readFile = sinon.fake.yields(true, undefined);
     const fs = { readFile };
     // const fs = {
@@ -90,6 +75,12 @@ describe('performSort', function() {
     //   }
     // };
     sort.performSort(argv, fs, printOutput);
+    assert.isTrue(
+      printOutput.calledWith({
+        error: 'sort: No such file or directory',
+        output: ''
+      })
+    );
   });
 });
 
