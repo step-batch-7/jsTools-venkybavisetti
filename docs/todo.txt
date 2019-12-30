@@ -24,6 +24,9 @@ v 0.2 :
 
 bugs in v0.1
   --done--covert file reading to asynchronously
-  test the asynchronously reading file
+  --done--test the asynchronously reading file
+  test the stdin Content
+
+
 
  

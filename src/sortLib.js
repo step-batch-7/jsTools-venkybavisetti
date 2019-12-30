@@ -27,11 +27,28 @@ const sortOnFile = function(error, content, printOutput) {
   printOutput({ error: '', output: sortedContent });
 };
 
-const performSort = function(cmdLineArgs, fs, printOutput) {
+const sortOnStdin = function(stdin, printOutput) {
+  let inputStreamText = '';
+  stdin.on('data', data => {
+    inputStreamText += data;
+  });
+  stdin.on('end', () => {
+    const sortedContent = sortOnContent(inputStreamText);
+    printOutput({ error: '', output: sortedContent });
+  });
+};
+
+const performSort = function(cmdLineArgs, fileHandlingFunc, printOutput) {
   const parsedSortArgs = parseUserArgs(cmdLineArgs);
-  fs.readFile(parsedSortArgs.fileName, 'utf8', (error, content) =>
-    sortOnFile(error, content, printOutput)
-  );
+  if (!parsedSortArgs.fileName) {
+    sortOnStdin(fileHandlingFunc.stdin, printOutput);
+  } else {
+    fileHandlingFunc.readFile(
+      parsedSortArgs.fileName,
+      'utf8',
+      (error, content) => sortOnFile(error, content, printOutput)
+    );
+  }
 };
 
 module.exports = {
