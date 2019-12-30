@@ -1,0 +1,4 @@
+cat ./appTest/sortData/dataInAlpWordsFor_v0_1.txt|node sort.js 
+abc
+bcd
+cde
