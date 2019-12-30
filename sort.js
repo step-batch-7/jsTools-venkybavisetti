@@ -3,6 +3,7 @@ const performSort = require('./src/sortLib.js').performSort;
 const { stderr, stdout, stdin } = process;
 
 const main = function() {
+  stdin.setEncoding('utf8');
   const [, , ...cmdLineArgs] = process.argv;
   const printOutput = function(sortResult) {
     stdout.write(sortResult.output);

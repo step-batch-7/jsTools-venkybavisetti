@@ -1,8 +1,9 @@
 'use strict';
 
 const { assert } = require('chai');
-const sort = require('../src/sortLib.js');
 const sinon = require('sinon');
+const Events = require('events');
+const sort = require('../src/sortLib.js');
 
 describe('parseUserArgs', function() {
   it('should separate options and fileName', function() {
@@ -34,6 +35,23 @@ describe('sortOnFile', function() {
         output: ''
       })
     );
+  });
+});
+
+describe('sortOnStdin', function() {
+  it('should take content from the stdin and sort the content', function() {
+    // const printOutput = function(sortResult) {
+    //   assert.deepStrictEqual(sortResult.output, 'a\nb\nc');
+    //   assert.strictEqual(sortResult.error, '');
+    // };
+    const myEmitter = new Events();
+    const printOutput = sinon.spy();
+    sort.sortOnStdin(myEmitter, printOutput);
+    myEmitter.emit('data', 'a\n');
+    myEmitter.emit('data', 'c\n');
+    myEmitter.emit('data', 'b\n');
+    myEmitter.emit('end');
+    assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 });
 

@@ -28,13 +28,12 @@ const sortOnFile = function(error, content, printOutput) {
 };
 
 const sortOnStdin = function(stdin, printOutput) {
-  stdin.setEncoding('utf8');
   let inputStreamText = '';
   stdin.on('data', data => {
     inputStreamText += data;
   });
   stdin.on('end', () => {
-    const sortedContent = sortOnContent(inputStreamText);
+    const sortedContent = sortOnContent(inputStreamText.replace(/\n$/, ''));
     printOutput({ error: '', output: sortedContent });
   });
 };
