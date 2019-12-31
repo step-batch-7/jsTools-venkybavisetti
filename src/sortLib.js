@@ -5,11 +5,11 @@ const parseUserArgs = function(cmdLineArgs) {
   return { fileName: cmdLineArgs[fileIndex] };
 };
 
-const generateErrorMsg = function(errorType) {
+const generateErrorMsg = function(error) {
   const errorMsg = {
-    fileError: 'sort: No such file or directory'
+    ENOENT: 'sort: No such file or directory'
   };
-  return errorMsg[errorType];
+  return errorMsg[error.code];
 };
 
 const sortOnContent = function(content) {
@@ -19,8 +19,8 @@ const sortOnContent = function(content) {
 
 const sortOnFile = function(error, content, printOutput) {
   if (error) {
-    const error = generateErrorMsg('fileError');
-    printOutput({ error, output: '' });
+    const errorLine = generateErrorMsg(error);
+    printOutput({ error: errorLine, output: '' });
     return;
   }
   const sortedContent = sortOnContent(content);
@@ -28,6 +28,7 @@ const sortOnFile = function(error, content, printOutput) {
 };
 
 const sortOnStdin = function(stdin, printOutput) {
+  stdin.setEncoding('utf8');
   let inputStreamText = '';
   stdin.on('data', data => {
     inputStreamText += data;

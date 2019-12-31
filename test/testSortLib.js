@@ -25,7 +25,7 @@ describe('sortOnFile', function() {
     assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
   it('should give file error when the error argument is given', function() {
-    const error = true;
+    const error = { code: 'ENOENT' };
     const content = undefined;
     const printOutput = sinon.spy();
     sort.sortOnFile(error, content, printOutput);
@@ -45,6 +45,7 @@ describe('sortOnStdin', function() {
     //   assert.strictEqual(sortResult.error, '');
     // };
     const myEmitter = new Events();
+    myEmitter.setEncoding = sinon.fake();
     const printOutput = sinon.spy();
     sort.sortOnStdin(myEmitter, printOutput);
     myEmitter.emit('data', 'a\n');
@@ -52,6 +53,7 @@ describe('sortOnStdin', function() {
     myEmitter.emit('data', 'b\n');
     myEmitter.emit('end');
     assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
+    assert(myEmitter.setEncoding.calledWith('utf8'));
   });
 });
 
@@ -71,19 +73,23 @@ describe('sortOnContent', function() {
 });
 
 describe('performSort', function() {
-  it('should call callback for readFile', () => {
+  it('should call callback for readFile', done => {
     const argv = ['somePath'];
-    const printOutput = sinon.spy();
-    const readFile = sinon.fake.yields(null, 'a\nc\nb');
-    const fs = { readFile };
+    const fs = { readFile: sinon.fake() };
+    const printOutput = sinon.spy(done());
+    const callback = sinon.fake.yieldsAsync(null, 'a\nc\nb');
+    sinon.replace(fs, 'readFile', callback);
     sort.performSort(argv, fs, printOutput);
-    assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
+    assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
+    const expected = ['somePath', 'utf8'];
+    const [filePath, encoding] = callback.firstCall.args;
+    assert.deepStrictEqual([filePath, encoding], expected);
   });
 
-  it('should give file error when file is not present', () => {
+  it('should give file error when file is not present', done => {
     const argv = ['somePath'];
-    const printOutput = sinon.spy();
-    const readFile = sinon.fake.yields(true, undefined);
+    const printOutput = sinon.spy(done());
+    const readFile = sinon.fake.yieldsAsync(true, undefined);
     const fs = { readFile };
     // const fs = {
     //   readFile: function(path, encoding, callback) {
@@ -104,7 +110,7 @@ describe('performSort', function() {
 
 describe('generateErrorMsg', function() {
   it('should get file error', function() {
-    const actual = sort.generateErrorMsg('fileError');
+    const actual = sort.generateErrorMsg({ code: 'ENOENT' });
     const expected = 'sort: No such file or directory';
     assert.strictEqual(actual, expected);
   });
