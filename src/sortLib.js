@@ -42,15 +42,14 @@ const sortOnStdin = function(stdin, onComplete) {
 };
 
 const performSort = function(cmdLineArgs, fileHandlingFunc, printOutput) {
-  const parsedSortArgs = parseUserArgs(cmdLineArgs);
-  if (!parsedSortArgs.fileName) {
-    sortOnStdin(fileHandlingFunc.stdin, printOutput);
-  } else {
-    fileHandlingFunc.readFile(
-      parsedSortArgs.fileName,
-      'utf8',
-      (error, content) => sortOnFile(error, content, printOutput)
+  const { stdin, readFile } = fileHandlingFunc;
+  const { fileName } = parseUserArgs(cmdLineArgs);
+  if (fileName) {
+    readFile(fileName, 'utf8', (error, content) =>
+      sortOnFile(error, content, printOutput)
     );
+  } else {
+    sortOnStdin(stdin, printOutput);
   }
 };
 
