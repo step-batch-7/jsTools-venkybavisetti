@@ -17,7 +17,7 @@ describe('parseUserArgs', function() {
 });
 
 describe('sortOnFile', function() {
-  it('should give sorted file when is no error', function() {
+  it('should give sorted file when there is no error', function() {
     const error = false;
     const content = 'b\na\nc';
     const printOutput = sinon.spy();
@@ -32,6 +32,18 @@ describe('sortOnFile', function() {
     assert.isTrue(
       printOutput.calledWith({
         error: 'sort: No such file or directory',
+        output: ''
+      })
+    );
+  });
+  it('should give directory error when directory is given as file', function() {
+    const error = { code: 'EISDIR' };
+    const content = undefined;
+    const printOutput = sinon.spy();
+    sort.sortOnFile(error, content, printOutput);
+    assert.isTrue(
+      printOutput.calledWith({
+        error: 'sort: Is a directory',
         output: ''
       })
     );

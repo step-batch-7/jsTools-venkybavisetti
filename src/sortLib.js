@@ -7,6 +7,7 @@ const parseUserArgs = function(cmdLineArgs) {
 
 const generateErrorMsg = function(error) {
   const errorMsg = {
+    EISDIR: 'sort: Is a directory',
     ENOENT: 'sort: No such file or directory'
   };
   return errorMsg[error.code];
@@ -18,7 +19,6 @@ const sortOnContent = function(content) {
 };
 
 const sortOnFile = function(error, content, printOutput) {
-  console.log(error);
   if (error) {
     const errorLine = generateErrorMsg(error);
     printOutput({ error: errorLine, output: '' });
