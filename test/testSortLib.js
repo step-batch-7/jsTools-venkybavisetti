@@ -63,18 +63,15 @@ describe('sortOnFile', function() {
 
 describe('sortOnStdin', function() {
   it('should take content from the stdin and sort the content', () => {
-    const one = 1,
-      two = 2;
-    //zero = 0;
     const stdin = { setEncoding: sinon.fake(), on: sinon.fake() };
     const printOutput = sinon.spy();
     sort.sortOnStdin(stdin, printOutput);
     assert(stdin.setEncoding.calledWith('utf8'));
-    //assert.strictEqual(stdin.on.firstCall.args[zero], 'data');
-    stdin.on.firstCall.args[one]('c\nb\na\n');
-    //assert.strictEqual(stdin.on.secondCall.args[zero], 'end');
-    assert.strictEqual(stdin.on.callCount, two);
-    stdin.on.secondCall.args[one]();
+    assert.strictEqual(stdin.on.firstCall.args[0], 'data');
+    stdin.on.firstCall.args[1]('c\nb\na\n');
+    assert.strictEqual(stdin.on.secondCall.args[0], 'end');
+    assert.strictEqual(stdin.on.callCount, 2);
+    stdin.on.secondCall.args[1]();
     assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 });
@@ -107,9 +104,6 @@ describe('performSort', function() {
     assert.deepStrictEqual([filePath, encoding], expected);
   });
   it('should sort on  stdin when there is no fileName', () => {
-    const one = 1,
-      two = 2;
-    //zero = 0;
     const argv = [];
     const printOutput = sinon.spy();
     const fileHandlingFun = {
@@ -117,11 +111,11 @@ describe('performSort', function() {
     };
     sort.performSort(argv, fileHandlingFun, printOutput);
     assert(fileHandlingFun.stdin.setEncoding.calledWith('utf8'));
-    //assert.strictEqual(fileHandlingFun.stdin.on.firstCall.args[zero], 'data');
-    fileHandlingFun.stdin.on.firstCall.args[one]('c\nb\na\n');
-    //assert.strictEqual(fileHandlingFun.stdin.on.secondCall.args[zero], 'end');
-    assert.strictEqual(fileHandlingFun.stdin.on.callCount, two);
-    fileHandlingFun.stdin.on.secondCall.args[one]();
+    assert.strictEqual(fileHandlingFun.stdin.on.firstCall.args[0], 'data');
+    fileHandlingFun.stdin.on.firstCall.args[1]('c\nb\na\n');
+    assert.strictEqual(fileHandlingFun.stdin.on.secondCall.args[0], 'end');
+    assert.strictEqual(fileHandlingFun.stdin.on.callCount, 2);
+    fileHandlingFun.stdin.on.secondCall.args[1]();
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 
