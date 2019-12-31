@@ -1,7 +1,6 @@
 'use strict';
 
 const { assert } = require('chai');
-const Events = require('events');
 const sinon = require('sinon');
 const sort = require('../src/sortLib.js');
 
@@ -48,7 +47,7 @@ describe('sortOnFile', function() {
       })
     );
   });
-  it('should give permission error when we try to access the nonReadable file', () => {
+  it('should give permission error when the file can not have access', () => {
     const error = { code: 'EACCES' };
     const content = undefined;
     const printOutput = sinon.spy();
@@ -64,20 +63,26 @@ describe('sortOnFile', function() {
 
 describe('sortOnStdin', function() {
   it('should take content from the stdin and sort the content', function() {
-    // const printOutput = function(sortResult) {
-    //   assert.deepStrictEqual(sortResult.output, 'a\nb\nc');
-    //   assert.strictEqual(sortResult.error, '');
-    // };
-    const myEmitter = new Events();
-    myEmitter.setEncoding = sinon.fake();
+    // const myEmitter = new Events();
+    // myEmitter.setEncoding = sinon.fake();
+    // const printOutput = sinon.spy();
+    // sort.sortOnStdin(myEmitter, printOutput);
+    // myEmitter.emit('data', 'a\n');
+    // myEmitter.emit('data', 'c\n');
+    // myEmitter.emit('data', 'b\n');
+    // myEmitter.emit('end');
+    // assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
+    // assert(myEmitter.setEncoding.calledWith('utf8'));
+    const stdin = { setEncoding: sinon.fake(), on: sinon.fake() };
     const printOutput = sinon.spy();
-    sort.sortOnStdin(myEmitter, printOutput);
-    myEmitter.emit('data', 'a\n');
-    myEmitter.emit('data', 'c\n');
-    myEmitter.emit('data', 'b\n');
-    myEmitter.emit('end');
+    sort.sortOnStdin(stdin, printOutput);
+    assert(stdin.setEncoding.calledWith('utf8'));
+    assert.strictEqual(stdin.on.firstCall.args[0], 'data');
+    stdin.on.firstCall.args[1]('c\nb\na\n');
+    assert.strictEqual(stdin.on.secondCall.args[0], 'end');
+    assert.strictEqual(stdin.on.callCount, 2);
+    stdin.on.secondCall.args[1]();
     assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
-    assert(myEmitter.setEncoding.calledWith('utf8'));
   });
 });
 
