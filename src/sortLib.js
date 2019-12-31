@@ -8,7 +8,8 @@ const parseUserArgs = function(cmdLineArgs) {
 const generateErrorMsg = function(error) {
   const errorMsg = {
     EISDIR: 'sort: Is a directory',
-    ENOENT: 'sort: No such file or directory'
+    ENOENT: 'sort: No such file or directory',
+    EACCES: 'sort: Permission denied'
   };
   return errorMsg[error.code];
 };
@@ -18,17 +19,17 @@ const sortOnContent = function(content) {
   return totalLines.sort().join('\n');
 };
 
-const sortOnFile = function(error, content, printOutput) {
+const sortOnFile = function(error, content, onComplete) {
   if (error) {
     const errorLine = generateErrorMsg(error);
-    printOutput({ error: errorLine, output: '' });
+    onComplete({ error: errorLine, output: '' });
     return;
   }
   const sortedContent = sortOnContent(content);
-  printOutput({ error: '', output: sortedContent });
+  onComplete({ error: '', output: sortedContent });
 };
 
-const sortOnStdin = function(stdin, printOutput) {
+const sortOnStdin = function(stdin, onComplete) {
   stdin.setEncoding('utf8');
   let inputStreamText = '';
   stdin.on('data', data => {
@@ -36,7 +37,7 @@ const sortOnStdin = function(stdin, printOutput) {
   });
   stdin.on('end', () => {
     const sortedContent = sortOnContent(inputStreamText.replace(/\n$/, ''));
-    printOutput({ error: '', output: sortedContent });
+    onComplete({ error: '', output: sortedContent });
   });
 };
 

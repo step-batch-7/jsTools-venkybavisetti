@@ -1,8 +1,8 @@
 'use strict';
 
 const { assert } = require('chai');
-const sinon = require('sinon');
 const Events = require('events');
+const sinon = require('sinon');
 const sort = require('../src/sortLib.js');
 
 describe('parseUserArgs', function() {
@@ -48,6 +48,18 @@ describe('sortOnFile', function() {
       })
     );
   });
+  it('should give permission error when we try to access the nonReadable file', () => {
+    const error = { code: 'EACCES' };
+    const content = undefined;
+    const printOutput = sinon.spy();
+    sort.sortOnFile(error, content, printOutput);
+    assert.isTrue(
+      printOutput.calledWith({
+        error: 'sort: Permission denied',
+        output: ''
+      })
+    );
+  });
 });
 
 describe('sortOnStdin', function() {
@@ -87,10 +99,9 @@ describe('sortOnContent', function() {
 describe('performSort', function() {
   it('should call callback for readFile', done => {
     const argv = ['somePath'];
-    const fs = { readFile: sinon.fake() };
     const printOutput = sinon.spy(done());
     const callback = sinon.fake.yieldsAsync(null, 'a\nc\nb');
-    sinon.replace(fs, 'readFile', callback);
+    const fs = { readFile: callback };
     sort.performSort(argv, fs, printOutput);
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
     const expected = ['somePath', 'utf8'];
@@ -101,8 +112,8 @@ describe('performSort', function() {
   it('should give file error when file is not present', done => {
     const argv = ['somePath'];
     const printOutput = sinon.spy(done());
-    const readFile = sinon.fake.yieldsAsync(true, undefined);
-    const fs = { readFile };
+    const callback = sinon.fake.yieldsAsync(true, undefined);
+    const fs = { readFile: callback };
     // const fs = {
     //   readFile: function(path, encoding, callback) {
     //     assert.deepStrictEqual(path, 'somePath');
