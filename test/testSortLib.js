@@ -63,16 +63,6 @@ describe('sortOnFile', function() {
 
 describe('sortOnStdin', function() {
   it('should take content from the stdin and sort the content', () => {
-    // const myEmitter = new Events();
-    // myEmitter.setEncoding = sinon.fake();
-    // const printOutput = sinon.spy();
-    // sort.sortOnStdin(myEmitter, printOutput);
-    // myEmitter.emit('data', 'a\n');
-    // myEmitter.emit('data', 'c\n');
-    // myEmitter.emit('data', 'b\n');
-    // myEmitter.emit('end');
-    // assert.isTrue(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
-    // assert(myEmitter.setEncoding.calledWith('utf8'));
     const one = 1,
       two = 2;
     //zero = 0;
@@ -140,13 +130,6 @@ describe('performSort', function() {
     const printOutput = sinon.spy(done());
     const callback = sinon.fake.yieldsAsync(true, undefined);
     const fs = { readFile: callback };
-    // const fs = {
-    //   readFile: function(path, encoding, callback) {
-    //     assert.deepStrictEqual(path, 'somePath');
-    //     assert.deepStrictEqual(encoding, 'utf8');
-    //     callback(true, undefined);
-    //   }
-    // };
     sort.performSort(argv, fs, printOutput);
     assert.isTrue(
       printOutput.calledWith({

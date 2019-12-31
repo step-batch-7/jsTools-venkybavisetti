@@ -44,10 +44,9 @@ const sortOnStdin = function(stdin, onComplete) {
 const performSort = function(cmdLineArgs, fileHandlingFunc, printOutput) {
   const { stdin, readFile } = fileHandlingFunc;
   const { fileName } = parseUserArgs(cmdLineArgs);
+  const onFinish = (error, content) => sortOnFile(error, content, printOutput);
   if (fileName) {
-    readFile(fileName, 'utf8', (error, content) =>
-      sortOnFile(error, content, printOutput)
-    );
+    readFile(fileName, 'utf8', onFinish);
   } else {
     sortOnStdin(stdin, printOutput);
   }

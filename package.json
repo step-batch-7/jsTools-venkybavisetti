@@ -7,11 +7,11 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "mocha && npm run lint",
+    "test": "mocha && eslint src test sort.js",
     "cover": "nyc mocha",
     "coverage": "nyc --reporter html mocha && open coverage/index.html",
     "alltests": "npm test && ./runAppTests.sh appTest/*.test",
-    "lint": "eslint src test sort.js"
+    "getLinter": "curl https://raw.githubusercontent.com/blpabhishek/eslintrc-config/master/.eslintrc.json -o .eslintrc.json"
   },
   "repository": {
     "type": "git",
