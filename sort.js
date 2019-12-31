@@ -7,6 +7,9 @@ const main = function() {
   const printOutput = function(sortResult) {
     stdout.write(sortResult.output);
     stderr.write(sortResult.error);
+    if (sortResult.error) {
+      process.exitCode = 2;
+    }
   };
   const fileHandlingFunc = { stdin, readFile: fs.readFile };
   performSort(cmdLineArgs, fileHandlingFunc, printOutput);

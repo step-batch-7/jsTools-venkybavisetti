@@ -18,6 +18,7 @@ const sortOnContent = function(content) {
 };
 
 const sortOnFile = function(error, content, printOutput) {
+  console.log(error);
   if (error) {
     const errorLine = generateErrorMsg(error);
     printOutput({ error: errorLine, output: '' });
