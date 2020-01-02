@@ -24,8 +24,6 @@ const performSort = function(cmdLineArgs, streams, printOutput) {
   const { fileName } = parseUserArgs(cmdLineArgs);
   const inputStream = fileName ? createReadStream(fileName) : stdin;
   let inputContent = '';
-  inputStream.setEncoding('utf8');
-
   inputStream.on('data', data => {
     inputContent += data;
   });
