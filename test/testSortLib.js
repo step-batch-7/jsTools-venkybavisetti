@@ -31,9 +31,9 @@ describe('sortOnContent', function() {
 });
 
 describe('performSort', function() {
-  it('should sort on  file when there is no error', done => {
+  it('should sort on  file when there is no error', () => {
     const argv = ['somePath'];
-    const printOutput = sinon.spy(() => done());
+    const printOutput = sinon.spy();
     const readStream = { setEncoding: sinon.fake(), on: sinon.fake() };
     const createReadStream = sinon.fake.returns(readStream);
     sort.performSort(argv, { createReadStream }, printOutput);
@@ -48,9 +48,9 @@ describe('performSort', function() {
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 
-  it('should sort on  stdin when there is no fileName', done => {
+  it('should sort on  stdin when there is no fileName', () => {
     const argv = [];
-    const printOutput = sinon.spy(() => done());
+    const printOutput = sinon.spy();
     const stdin = { setEncoding: sinon.fake(), on: sinon.fake() };
     sort.performSort(argv, { stdin }, printOutput);
     assert(stdin.setEncoding.calledWith('utf8'));
@@ -65,13 +65,20 @@ describe('performSort', function() {
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 
-  it.skip('should give file error when file is not present', done => {
+  it.only('should give file error when file is not present', () => {
     const argv = ['somePath'];
-    const printOutput = sinon.spy(() => done());
-    const callback = sinon.fake.yieldsAsync(true, undefined);
-    const fs = { readFile: callback };
-    sort.performSort(argv, fs, printOutput);
-    assert.isTrue(
+    const printOutput = sinon.spy();
+    const readStream = { setEncoding: sinon.fake(), on: sinon.fake() };
+    const createReadStream = sinon.fake.returns(readStream);
+    sort.performSort(argv, { createReadStream }, printOutput);
+    assert(createReadStream.calledWith('somePath'));
+    assert(readStream.setEncoding.calledWith('utf8'));
+    assert.strictEqual(readStream.on.firstCall.args[0], 'data');
+    assert.strictEqual(readStream.on.secondCall.args[0], 'error');
+    assert.strictEqual(readStream.on.thirdCall.args[0], 'end');
+    assert.strictEqual(readStream.on.callCount, 3);
+    readStream.on.secondCall.args[1]({ code: 'ENOENT' });
+    assert(
       printOutput.calledWith({
         error: 'sort: No such file or directory',
         output: ''
