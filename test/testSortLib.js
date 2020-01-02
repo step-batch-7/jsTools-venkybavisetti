@@ -48,20 +48,20 @@ describe('performSort', function() {
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 
-  it.skip('should sort on  stdin when there is no fileName', done => {
+  it('should sort on  stdin when there is no fileName', done => {
     const argv = [];
     const printOutput = sinon.spy(() => done());
-    const fileHandlingFun = {
-      stdin: { setEncoding: sinon.fake(), on: sinon.fake() }
-    };
-    sort.performSort(argv, fileHandlingFun, printOutput);
-    assert(fileHandlingFun.stdin.setEncoding.calledWith('utf8'));
-    assert.strictEqual(fileHandlingFun.stdin.on.firstCall.args[0], 'data');
-    fileHandlingFun.stdin.on.firstCall.args[1]('c\nb\na\n');
-    assert.strictEqual(fileHandlingFun.stdin.on.secondCall.args[0], 'error');
-    assert.strictEqual(fileHandlingFun.stdin.on.thirdCall.args[0], 'end');
-    assert.strictEqual(fileHandlingFun.stdin.on.callCount, 3);
-    fileHandlingFun.stdin.on.thirdCall.args[1]();
+    const stdin = { setEncoding: sinon.fake(), on: sinon.fake() };
+    sort.performSort(argv, { stdin }, printOutput);
+    assert(stdin.setEncoding.calledWith('utf8'));
+    assert.strictEqual(stdin.on.firstCall.args[0], 'data');
+    stdin.on.firstCall.args[1]('c\n');
+    stdin.on.firstCall.args[1]('a\n');
+    stdin.on.firstCall.args[1]('b\n');
+    assert.strictEqual(stdin.on.secondCall.args[0], 'error');
+    assert.strictEqual(stdin.on.thirdCall.args[0], 'end');
+    assert.strictEqual(stdin.on.callCount, 3);
+    stdin.on.thirdCall.args[1]();
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 
