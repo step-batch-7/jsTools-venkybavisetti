@@ -19,44 +19,28 @@ const sortOnContent = function(content) {
   return totalLines.sort().join('\n');
 };
 
-const sortOnFile = function(error, content, onComplete) {
-  if (error) {
-    const errorLine = generateErrorMsg(error);
-    onComplete({ error: errorLine, output: '' });
-    return;
-  }
-  const sortedContent = sortOnContent(content);
-  onComplete({ error: '', output: sortedContent });
-};
-
-const sortOnStdin = function(stdin, onComplete) {
-  stdin.setEncoding('utf8');
-  let inputStreamText = '';
-  stdin.on('data', data => {
-    inputStreamText += data;
-  });
-  stdin.on('end', () => {
-    const sortedContent = sortOnContent(inputStreamText.replace(/\n$/, ''));
-    onComplete({ error: '', output: sortedContent });
-  });
-};
-
-const performSort = function(cmdLineArgs, fileHandlingFunc, printOutput) {
-  const { stdin, readFile } = fileHandlingFunc;
+const performSort = function(cmdLineArgs, streams, printOutput) {
+  const { stdin, createReadStream } = streams;
   const { fileName } = parseUserArgs(cmdLineArgs);
-  const onFinish = (error, content) => sortOnFile(error, content, printOutput);
-  if (fileName) {
-    readFile(fileName, 'utf8', onFinish);
-  } else {
-    sortOnStdin(stdin, printOutput);
-  }
+  const inputStream = fileName ? createReadStream(fileName) : stdin;
+  let inputContent = '';
+  inputStream.setEncoding('utf8');
+
+  inputStream.on('data', data => {
+    inputContent += data;
+  });
+  inputStream.on('error', error =>
+    printOutput({ error: generateErrorMsg(error), output: '' })
+  );
+  inputStream.on('end', () => {
+    const sortedContent = sortOnContent(inputContent.replace(/\n$/, ''));
+    printOutput({ error: '', output: sortedContent });
+  });
 };
 
 module.exports = {
   performSort,
-  sortOnFile,
   sortOnContent,
   parseUserArgs,
-  generateErrorMsg,
-  sortOnStdin
+  generateErrorMsg
 };

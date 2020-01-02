@@ -1,4 +1,4 @@
-const fs = require('fs');
+const { createReadStream } = require('fs');
 const performSort = require('./src/sortLib.js').performSort;
 const { stderr, stdout, stdin } = process;
 
@@ -11,8 +11,8 @@ const main = function() {
       process.exitCode = 2;
     }
   };
-  const fileHandlingFunc = { stdin, readFile: fs.readFile };
-  performSort(cmdLineArgs, fileHandlingFunc, printOutput);
+  const streams = { stdin, createReadStream };
+  performSort(cmdLineArgs, streams, printOutput);
 };
 
 main();
