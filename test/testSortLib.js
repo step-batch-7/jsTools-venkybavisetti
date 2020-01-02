@@ -34,19 +34,21 @@ describe('performSort', function() {
   it('should sort on  file when there is no error', done => {
     const argv = ['somePath'];
     const printOutput = sinon.spy(() => done());
-    const stream = { setEncoding: sinon.fake(), on: sinon.fake() };
-    const createReadStream = sinon.fake.returns(stream);
+    const readStream = { setEncoding: sinon.fake(), on: sinon.fake() };
+    const createReadStream = sinon.fake.returns(readStream);
     sort.performSort(argv, { createReadStream }, printOutput);
-    assert.strictEqual(stream.on.firstCall.args[0], 'data');
-    stream.on.firstCall.args[1]('c\nb\na\n');
-    assert.strictEqual(stream.on.secondCall.args[0], 'error');
-    assert.strictEqual(stream.on.thirdCall.args[0], 'end');
-    assert.strictEqual(stream.on.callCount, 3);
-    stream.on.thirdCall.args[1]();
+    assert(createReadStream.calledWith('somePath'));
+    assert(readStream.setEncoding.calledWith('utf8'));
+    assert.strictEqual(readStream.on.firstCall.args[0], 'data');
+    readStream.on.firstCall.args[1]('c\nb\na\n');
+    assert.strictEqual(readStream.on.secondCall.args[0], 'error');
+    assert.strictEqual(readStream.on.thirdCall.args[0], 'end');
+    assert.strictEqual(readStream.on.callCount, 3);
+    readStream.on.thirdCall.args[1]();
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
   });
 
-  it('should sort on  stdin when there is no fileName', done => {
+  it.skip('should sort on  stdin when there is no fileName', done => {
     const argv = [];
     const printOutput = sinon.spy(() => done());
     const fileHandlingFun = {
