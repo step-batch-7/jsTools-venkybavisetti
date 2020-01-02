@@ -136,9 +136,19 @@ describe('performSort', function() {
 });
 
 describe('generateErrorMsg', function() {
-  it('should get file error', function() {
+  it('should give file error', function() {
     const actual = sort.generateErrorMsg({ code: 'ENOENT' });
     const expected = 'sort: No such file or directory';
+    assert.strictEqual(actual, expected);
+  });
+  it('should give directory error', function() {
+    const actual = sort.generateErrorMsg({ code: 'EISDIR' });
+    const expected = 'sort: Is a directory';
+    assert.strictEqual(actual, expected);
+  });
+  it('should give permission error', function() {
+    const actual = sort.generateErrorMsg({ code: 'EACCES' });
+    const expected = 'sort: Permission denied';
     assert.strictEqual(actual, expected);
   });
 });

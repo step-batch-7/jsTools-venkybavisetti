@@ -22,9 +22,17 @@ v 0.2 :
   //i will pass stdout and stderr reference from main 
   //this function will branch in sudo main and calls sortContent function
 
-bugs in v0.1
+bugs in v0.2
   --done--covert file reading to asynchronously
   --done--test the asynchronously reading file
   --done--test the stdin Content
   --done--set the exit code in the error msg
+  --done--convert performSort into streams
+  cover all tests in the previous functions
+    should give sorted file when there is no error
+    should give file error when the error argument is given
+    should give directory error when directory is given as file
+    should give permission error when the file can not have access
+    should take content from the stdin and sort the content
+
  

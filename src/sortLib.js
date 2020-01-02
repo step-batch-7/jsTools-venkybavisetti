@@ -1,8 +1,8 @@
 'use strict';
 
 const parseUserArgs = function(cmdLineArgs) {
-  const fileIndex = 0;
-  return { fileName: cmdLineArgs[fileIndex] };
+  const [fileName] = cmdLineArgs;
+  return { fileName };
 };
 
 const generateErrorMsg = function(error) {
