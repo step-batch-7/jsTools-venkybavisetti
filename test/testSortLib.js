@@ -34,20 +34,20 @@ describe('performSort', function() {
   let stream, streamPicker;
   beforeEach(function() {
     stream = { setEncoding: sinon.fake(), on: sinon.fake() };
-    streamPicker = {};
+    streamPicker = { pick: sinon.fake.returns(stream) };
   });
-  it('should sort on  file when there is no error', () => {
-    const argv = ['somePath'];
-    streamPicker.pick = function(filePath) {
-      assert.strictEqual(filePath, 'somePath');
-      return stream;
-    };
-    const printOutput = sinon.spy();
-    sort.performSort(argv, streamPicker, printOutput);
+
+  afterEach(function() {
     assert.strictEqual(stream.on.firstCall.args[0], 'data');
-    stream.on.firstCall.args[1]('c\nb\na\n');
     assert.strictEqual(stream.on.secondCall.args[0], 'error');
     assert.strictEqual(stream.on.thirdCall.args[0], 'end');
+  });
+
+  it('should sort on  file when there is no error', () => {
+    const argv = ['somePath'];
+    const printOutput = sinon.spy();
+    sort.performSort(argv, streamPicker, printOutput);
+    stream.on.firstCall.args[1]('c\nb\na\n');
     assert.strictEqual(stream.on.callCount, 3);
     stream.on.thirdCall.args[1]();
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
@@ -55,19 +55,12 @@ describe('performSort', function() {
 
   it('should sort on  stdin when there is no fileName', () => {
     const argv = [];
-    streamPicker.pick = function(filePath) {
-      assert.strictEqual(filePath, undefined);
-      return stream;
-    };
     const printOutput = sinon.spy();
     sort.performSort(argv, streamPicker, printOutput);
     assert(stream.setEncoding.calledWith('utf8'));
-    assert.strictEqual(stream.on.firstCall.args[0], 'data');
     stream.on.firstCall.args[1]('c\n');
     stream.on.firstCall.args[1]('a\n');
     stream.on.firstCall.args[1]('b\n');
-    assert.strictEqual(stream.on.secondCall.args[0], 'error');
-    assert.strictEqual(stream.on.thirdCall.args[0], 'end');
     assert.strictEqual(stream.on.callCount, 3);
     stream.on.thirdCall.args[1]();
     assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
@@ -75,16 +68,9 @@ describe('performSort', function() {
 
   it('should give file error when file is not present', () => {
     const argv = ['somePath'];
-    streamPicker.pick = function(filePath) {
-      assert.strictEqual(filePath, 'somePath');
-      return stream;
-    };
     const printOutput = sinon.spy();
     sort.performSort(argv, streamPicker, printOutput);
     assert(stream.setEncoding.calledWith('utf8'));
-    assert.strictEqual(stream.on.firstCall.args[0], 'data');
-    assert.strictEqual(stream.on.secondCall.args[0], 'error');
-    assert.strictEqual(stream.on.thirdCall.args[0], 'end');
     assert.strictEqual(stream.on.callCount, 3);
     stream.on.secondCall.args[1]({ code: 'ENOENT' });
     assert(
