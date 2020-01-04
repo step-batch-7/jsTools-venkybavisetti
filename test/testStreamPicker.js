@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { stub } = require('sinon');
+const {stub} = require('sinon');
 const StreamPicker = require('../src/streamPicker.js');
 
 describe('streamPicker', function() {

@@ -29,10 +29,10 @@ bugs in v0.2
   --done--set the exit code in the error msg
   --done--convert performSort into streams
   cover all tests in the previous functions
-    should give sorted file when there is no error
-    should give file error when the error argument is given
-    should give directory error when directory is given as file
-    should give permission error when the file can not have access
-    should take content from the stdin and sort the content
+    --done--should give sorted file when there is no error
+    --done--should give file error when the error argument is given
+    --done--should give directory error when directory is given as file
+    --done--should give permission error when the file can not have access
+    --done--should take content from the stdin and sort the content
 
  

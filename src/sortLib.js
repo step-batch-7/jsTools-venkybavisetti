@@ -1,8 +1,6 @@
-'use strict';
-
 const parseUserArgs = function(cmdLineArgs) {
   const [fileName] = cmdLineArgs;
-  return { fileName };
+  return {fileName};
 };
 
 const generateErrorMsg = function(error) {
@@ -20,19 +18,20 @@ const sortOnContent = function(content) {
 };
 
 const performSort = function(cmdLineArgs, streamPicker, printOutput) {
-  const { fileName } = parseUserArgs(cmdLineArgs);
+  const {fileName} = parseUserArgs(cmdLineArgs);
   const inputStream = streamPicker.pick(fileName);
   inputStream.setEncoding('utf8');
   let inputContent = '';
+
   inputStream.on('data', data => {
     inputContent += data;
   });
   inputStream.on('error', error =>
-    printOutput({ error: generateErrorMsg(error), output: '' })
+    printOutput({error: generateErrorMsg(error), output: ''})
   );
   inputStream.on('end', () => {
     const sortedContent = sortOnContent(inputContent.replace(/\n$/, ''));
-    printOutput({ error: '', output: sortedContent });
+    printOutput({error: '', output: sortedContent});
   });
 };
 

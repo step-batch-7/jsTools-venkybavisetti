@@ -1,6 +1,6 @@
 'use strict';
 
-const { assert } = require('chai');
+const {assert} = require('chai');
 const sinon = require('sinon');
 const sort = require('../src/sortLib.js');
 
@@ -33,8 +33,8 @@ describe('sortOnContent', function() {
 describe('performSort', function() {
   let stream, streamPicker;
   beforeEach(function() {
-    stream = { setEncoding: sinon.fake(), on: sinon.fake() };
-    streamPicker = { pick: sinon.fake.returns(stream) };
+    stream = {setEncoding: sinon.fake(), on: sinon.fake()};
+    streamPicker = {pick: sinon.fake.returns(stream)};
   });
 
   afterEach(function() {
@@ -50,7 +50,7 @@ describe('performSort', function() {
     stream.on.firstCall.args[1]('c\nb\na\n');
     assert.strictEqual(stream.on.callCount, 3);
     stream.on.thirdCall.args[1]();
-    assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
+    assert(printOutput.calledWith({error: '', output: 'a\nb\nc'}));
   });
 
   it('should sort on  stdin when there is no fileName', () => {
@@ -63,7 +63,7 @@ describe('performSort', function() {
     stream.on.firstCall.args[1]('b\n');
     assert.strictEqual(stream.on.callCount, 3);
     stream.on.thirdCall.args[1]();
-    assert(printOutput.calledWith({ error: '', output: 'a\nb\nc' }));
+    assert(printOutput.calledWith({error: '', output: 'a\nb\nc'}));
   });
 
   it('should give file error when file is not present', () => {
@@ -72,7 +72,7 @@ describe('performSort', function() {
     sort.performSort(argv, streamPicker, printOutput);
     assert(stream.setEncoding.calledWith('utf8'));
     assert.strictEqual(stream.on.callCount, 3);
-    stream.on.secondCall.args[1]({ code: 'ENOENT' });
+    stream.on.secondCall.args[1]({code: 'ENOENT'});
     assert(
       printOutput.calledWith({
         error: 'sort: No such file or directory',
@@ -84,17 +84,17 @@ describe('performSort', function() {
 
 describe('generateErrorMsg', function() {
   it('should give file error', function() {
-    const actual = sort.generateErrorMsg({ code: 'ENOENT' });
+    const actual = sort.generateErrorMsg({code: 'ENOENT'});
     const expected = 'sort: No such file or directory';
     assert.strictEqual(actual, expected);
   });
   it('should give directory error', function() {
-    const actual = sort.generateErrorMsg({ code: 'EISDIR' });
+    const actual = sort.generateErrorMsg({code: 'EISDIR'});
     const expected = 'sort: Is a directory';
     assert.strictEqual(actual, expected);
   });
   it('should give permission error', function() {
-    const actual = sort.generateErrorMsg({ code: 'EACCES' });
+    const actual = sort.generateErrorMsg({code: 'EACCES'});
     const expected = 'sort: Permission denied';
     assert.strictEqual(actual, expected);
   });

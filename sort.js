@@ -1,7 +1,7 @@
-const { createReadStream } = require('fs');
+const {createReadStream} = require('fs');
 const performSort = require('./src/sortLib.js').performSort;
 const StreamPicker = require('./src/streamPicker.js');
-const { stderr, stdout, stdin } = process;
+const {stderr, stdout, stdin} = process;
 
 const main = function() {
   const [, , ...cmdLineArgs] = process.argv;
