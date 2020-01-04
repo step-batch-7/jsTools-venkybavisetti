@@ -1,6 +1,5 @@
 const {createReadStream} = require('fs');
 const performSort = require('./src/sortLib.js').performSort;
-const StreamPicker = require('./src/streamPicker.js');
 const {stderr, stdout, stdin} = process;
 
 const main = function() {
@@ -12,8 +11,7 @@ const main = function() {
       process.exitCode = 2;
     }
   };
-  const streamPicker = new StreamPicker(createReadStream, stdin);
-  performSort(cmdLineArgs, streamPicker, printOutput);
+  performSort(cmdLineArgs, stdin, createReadStream, printOutput);
 };
 
 main();

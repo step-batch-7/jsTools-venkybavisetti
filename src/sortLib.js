@@ -17,9 +17,9 @@ const sortOnContent = function(content) {
   return totalLines.sort().join('\n');
 };
 
-const performSort = function(cmdLineArgs, streamPicker, printOutput) {
+const performSort = function(cmdLineArgs, stdin, readStream, printOutput) {
   const {fileName} = parseUserArgs(cmdLineArgs);
-  const inputStream = streamPicker.pick(fileName);
+  const inputStream = fileName ? readStream(fileName) : stdin;
   inputStream.setEncoding('utf8');
   let inputContent = '';
 
