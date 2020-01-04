@@ -1,7 +1,7 @@
 'use strict';
 
 const {assert} = require('chai');
-const sinon = require('sinon');
+const {spy} = require('sinon');
 const sort = require('../src/sortLib.js');
 
 describe('parseUserArgs', function() {
@@ -33,62 +33,57 @@ describe('sortOnContent', function() {
 describe('performSort', function() {
   let fileStream, stdin, readStream;
   beforeEach(function() {
-    fileStream = {on: sinon.spy(), setEncoding: sinon.spy()};
-    stdin = {on: sinon.spy(), setEncoding: sinon.spy()};
+    fileStream = {on: spy(), setEncoding: spy()};
+    stdin = {on: spy(), setEncoding: spy()};
     readStream = () => fileStream;
   });
+  context('content is read by readStream', function() {
+    afterEach(function() {
+      assert.strictEqual(fileStream.on.firstCall.args[0], 'data');
+      assert.strictEqual(fileStream.on.secondCall.args[0], 'error');
+      assert.strictEqual(fileStream.on.thirdCall.args[0], 'end');
+      assert(fileStream.setEncoding.calledWith('utf8'));
+    });
+    it('should sort on  file when there is no error', () => {
+      const argv = ['somePath'];
+      const printOutput = spy();
+      sort.performSort(argv, stdin, readStream, printOutput);
+      fileStream.on.firstCall.args[1]('c\nb\na\n');
+      assert.strictEqual(fileStream.on.callCount, 3);
+      fileStream.on.thirdCall.args[1]();
+      assert(printOutput.calledWith({error: '', output: 'a\nb\nc'}));
+    });
 
-  // afterEach(function() {
-  //   assert.strictEqual(fileStream.on.firstCall.args[0], 'data');
-  //   assert.strictEqual(fileStream.on.secondCall.args[0], 'error');
-  //   assert.strictEqual(fileStream.on.thirdCall.args[0], 'end');
-  // });
-
-  it('should sort on  file when there is no error', () => {
-    const argv = ['somePath'];
-    const printOutput = sinon.spy();
-    sort.performSort(argv, stdin, readStream, printOutput);
-    assert.strictEqual(fileStream.on.firstCall.args[0], 'data');
-    assert.strictEqual(fileStream.on.secondCall.args[0], 'error');
-    assert.strictEqual(fileStream.on.thirdCall.args[0], 'end');
-    fileStream.on.firstCall.args[1]('c\nb\na\n');
-    assert.strictEqual(fileStream.on.callCount, 3);
-    fileStream.on.thirdCall.args[1]();
-    assert(printOutput.calledWith({error: '', output: 'a\nb\nc'}));
+    it('should give file error when file is not present', () => {
+      const argv = ['somePath'];
+      const printOutput = spy();
+      sort.performSort(argv, stdin, readStream, printOutput);
+      assert.strictEqual(fileStream.on.callCount, 3);
+      fileStream.on.secondCall.args[1]({code: 'ENOENT'});
+      assert(
+        printOutput.calledWith({
+          error: 'sort: No such file or directory',
+          output: ''
+        })
+      );
+    });
   });
-
-  it('should sort on  stdin when there is no fileName', () => {
-    const argv = [];
-    const printOutput = sinon.spy();
-    sort.performSort(argv, stdin, readStream, printOutput);
-    assert(stdin.setEncoding.calledWith('utf8'));
-    assert.strictEqual(stdin.on.firstCall.args[0], 'data');
-    assert.strictEqual(stdin.on.secondCall.args[0], 'error');
-    assert.strictEqual(stdin.on.thirdCall.args[0], 'end');
-    stdin.on.firstCall.args[1]('c\n');
-    stdin.on.firstCall.args[1]('a\n');
-    stdin.on.firstCall.args[1]('b\n');
-    assert.strictEqual(stdin.on.callCount, 3);
-    stdin.on.thirdCall.args[1]();
-    assert(printOutput.calledWith({error: '', output: 'a\nb\nc'}));
-  });
-
-  it('should give file error when file is not present', () => {
-    const argv = ['somePath'];
-    const printOutput = sinon.spy();
-    sort.performSort(argv, stdin, readStream, printOutput);
-    assert.strictEqual(fileStream.on.firstCall.args[0], 'data');
-    assert.strictEqual(fileStream.on.secondCall.args[0], 'error');
-    assert.strictEqual(fileStream.on.thirdCall.args[0], 'end');
-    assert(fileStream.setEncoding.calledWith('utf8'));
-    assert.strictEqual(fileStream.on.callCount, 3);
-    fileStream.on.secondCall.args[1]({code: 'ENOENT'});
-    assert(
-      printOutput.calledWith({
-        error: 'sort: No such file or directory',
-        output: ''
-      })
-    );
+  context('content is read by stdin', function() {
+    it('should sort on  stdin when there is no fileName', () => {
+      const argv = [];
+      const printOutput = spy();
+      sort.performSort(argv, stdin, readStream, printOutput);
+      assert(stdin.setEncoding.calledWith('utf8'));
+      assert.strictEqual(stdin.on.firstCall.args[0], 'data');
+      assert.strictEqual(stdin.on.secondCall.args[0], 'error');
+      assert.strictEqual(stdin.on.thirdCall.args[0], 'end');
+      stdin.on.firstCall.args[1]('c\n');
+      stdin.on.firstCall.args[1]('a\n');
+      stdin.on.firstCall.args[1]('b\n');
+      assert.strictEqual(stdin.on.callCount, 3);
+      stdin.on.thirdCall.args[1]();
+      assert(printOutput.calledWith({error: '', output: 'a\nb\nc'}));
+    });
   });
 });
 
